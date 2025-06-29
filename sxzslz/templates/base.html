@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/normalize.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    {% block link %}{% endblock %}
+    <title>{% block title %}{% endblock %} - 鸠江区沈巷镇水利站</title>
+  </head>
+  <body>
+    {% include 'common/header.html' %} {% block content %}{% endblock %} {%
+    include 'common/footer.html' %}
+  </body>
+</html>

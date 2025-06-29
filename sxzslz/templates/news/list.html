@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block title %}新闻列表{% endblock %} {% block
+content %}
+<main>
+  <div class="news-list">
+    <div class="catelog">
+      <div class="title">信息分类</div>
+      {% for subset in subsets %}
+      <div class="item {% if subset.subset_id==subset_id %} active{% endif %}">
+        <a href="{{ url_for("news.news_list", subset=subset.subset_id) }}">{{ subset.subset_name }}</a>
+      </div>
+       {% endfor %}
+    </div>
+
+    <div class="wrap2">
+      <div class="title">
+        <div class="text">{{ subsets[subset_id-1].subset_name }}</div>
+        <div class="line">
+          <div class="bottom"></div>
+        </div>
+      </div>
+      <ul>
+        {% for article in articles %}
+        <li>
+          <span>-</span>
+          <span class="news-title"
+            ><a
+              href="{{ url_for('news.news_detail', article_id=article.article_id) }}"
+              >{{ article.title }}</a
+            ></span
+          >
+          <span class="news-date"
+            >{{ article.create_time.strftime("%Y-%m-%d")}}</span
+          >
+        </li>
+
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</main>
+{% endblock %}

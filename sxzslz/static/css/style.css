@@ -1,0 +1,211 @@
+@charset "UTF-8";
+
+header {
+  height: 60px;
+  background-color: #fff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+header .heder-container {
+  width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  line-height: 60px;
+}
+
+header .heder-container .logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+header .heder-container nav {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+header .heder-container nav a {
+  font-size: 1.2em;
+  color: #000;
+}
+
+header .heder-container nav a span {
+  display: inline-block;
+  height: 60px;
+}
+
+header .heder-container nav a div {
+  width: 100%;
+  height: 2px;
+}
+
+header .heder-container nav a:hover {
+  color: #c7000b;
+}
+
+header .heder-container nav a:hover div {
+  background-color: #c7000b;
+}
+
+header .heder-container nav .active {
+  color: #c7000b;
+}
+
+header .heder-container nav .active div {
+  background-color: #c7000b;
+}
+
+main {
+  width: 1000px;
+  margin: auto;
+}
+
+main .news-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+main .news-list .catelog {
+  width: 280px;
+  height: 800px;
+}
+
+main .news-list .catelog .title {
+  height: 48px;
+  line-height: 48px;
+  font-size: 1.2em;
+  background-color: #c7000b;
+  color: #fff;
+  text-align: center;
+}
+
+main .news-list .catelog .item {
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  font-size: 1.2em;
+  border-left: 2px solid #fff;
+}
+
+main .news-list .catelog .item a {
+  color: #000;
+}
+
+main .news-list .catelog .item:hover {
+  background-color: #e5e5e5;
+  border-left: 2px solid #c7000b;
+}
+
+main .news-list .catelog .active {
+  background-color: #e5e5e5;
+  border-left: 2px solid #c7000b;
+}
+
+main .news-list .wrap2 {
+  width: 720px;
+}
+
+main .news-list .wrap2 .title .text {
+  width: 140px;
+  text-align: center;
+  margin-left: 40px;
+  height: 46px;
+  line-height: 48px;
+  font-size: 1.5em;
+}
+
+main .news-list .wrap2 .title .line {
+  margin: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #a6a6a6;
+}
+
+main .news-list .wrap2 .title .line .bottom {
+  width: 140px;
+  margin-left: 40px;
+  height: 2px;
+  background-color: #c7000b;
+}
+
+main .news-list .wrap2 ul {
+  padding: 0;
+}
+
+main .news-list .wrap2 ul li {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+main .news-list .wrap2 ul li .news-title {
+  width: 580px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+main .news-list .wrap2 ul li .news-title a {
+  color: #000;
+}
+
+main .news-list .wrap2 ul li .news-title a:hover {
+  color: #c7000b;
+}
+
+main .news-list .wrap2 ul li .news-date {
+  width: 100px;
+  text-align: right;
+  color: #808080;
+}
+
+main .news-detail .location {
+  margin: 20px 0;
+}
+
+main .news-detail h1 {
+  text-align: center;
+}
+
+main .news-detail .desc {
+  color: #383838;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 4px;
+  border-bottom: 0.5px solid #a6a6a6;
+}
+
+main .editor—wrapper {
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  z-index: 100;
+  /* 按需定义 */
+}
+
+main .toolbar-container {
+  border-bottom: 1px solid #ccc;
+}
+
+main .editor-container {
+  height: 900px;
+}
+
+footer {
+  background-color: #8d8d8d;
+}
+
+footer div {
+  font-size: 1em;
+  width: 1000px;
+  height: 40px;
+  line-height: 40px;
+  margin: 0 auto;
+  color: #fff;
+  text-align: center;
+}
+
+/*# sourceMappingURL=style.css.map */

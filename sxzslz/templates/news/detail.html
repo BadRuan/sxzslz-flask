@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block title %}新闻详情{% endblock %} {% block
+content %}
+<main>
+  <div class="news-detail">
+    <div class="location">当前位置：首页>新闻列表>重要新闻</div>
+    <h1>{{ article.title }}</h1>
+    <div class="desc">
+      <div class="desc1">
+        发布时间：{{ article.create_time.strftime("%Y-%m-%d %H:%M:%S") }}
+      </div>
+      <div class="desc2">编辑： {{ article.nick_name }}</div>
+      <div class="desc3">浏览次数：{{ article.read_count }}</div>
+    </div>
+    <div>{{ article.content | safe }}</div>
+  </div>
+</main>
+{% endblock %}

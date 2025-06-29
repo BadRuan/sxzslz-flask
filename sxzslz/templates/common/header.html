@@ -1,0 +1,28 @@
+<header>
+  <div class="heder-container">
+    <div class="logo">
+      <img
+        src="{{ url_for('static', filename='/icon/water-logo.svg') }}"
+        alt="logo"
+      />
+      <img
+        src="{{ url_for('static', filename='/icon/logo-text.svg') }}"
+        alt="logo-text"
+      />
+    </div>
+    <nav>
+      <a href="#">
+        <span>网站首页</span>
+        <div></div>
+      </a>
+      <a href="{{ url_for('news.news_list') }}" class="active">
+        <span>新闻列表</span>
+        <div></div>
+      </a>
+      <a href="#">
+        <span>关于我们</span>
+        <div></div>
+      </a>
+    </nav>
+  </div>
+</header>
