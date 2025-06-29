@@ -38,7 +38,6 @@ class Article(BaseModel):
 
 
 class Pagination(BaseModel):
-    total_count: int
-    total_pages: int
-    current_page: int
-    limit_count: int
+    pages: int
+    current: int
+    limit: int

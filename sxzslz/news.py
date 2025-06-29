@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, abort
 from typing import List
-from sxzslz.model import Subset, Article
+from sxzslz.model import Subset, Article, Pagination
 from sxzslz.service import Service
 from sxzslz.service.subset_service import SubsetService
 from sxzslz.service.article_service import ArticleService
@@ -13,13 +13,19 @@ bp = Blueprint("news", __name__, url_prefix="/news")
 def news_list():
     subset_id: int = int(request.args.get("subset", 1))
     page: int = int(request.args.get("page", 1))
-    limit: int = int(request.args.get("limit", 20))
+    limit: int = int(request.args.get("limit", 10))
     subset_service: Service = SubsetService()
     article_service: Service = ArticleService()
+    pages: int = article_service.get_pages(limit)
     subsets: List[Subset] = subset_service.query_by_page(1, 10)
     articles: List[Article] = article_service.query_by_page(subset_id, page, limit)
+    pagination: Pagination = Pagination(pages=pages, current=page, limit=limit)
     return render_template(
-        "news/list.html", subset_id=subset_id, subsets=subsets, articles=articles
+        "news/list.html",
+        subset_id=subset_id,
+        subsets=subsets,
+        articles=articles,
+        pagination=pagination,
     )
 
 

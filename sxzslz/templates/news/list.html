@@ -32,9 +32,19 @@ content %}
             >{{ article.create_time.strftime("%Y-%m-%d")}}</span
           >
         </li>
-
         {% endfor %}
       </ul>
+      <div class="pagination">
+            <a class="pagination-item" href="{{ url_for('news.news_list', subset=subset_id, page=1) }}">首页</a>
+            <a class="pagination-item" href="#">上一页</a>
+            <a class="pagination-item" href="#">1</a>
+            <a class="pagination-item" href="#">2</a>
+            <div class="pagination-item active">{{ pagination.current }}</div>
+            <a class="pagination-item" href="#">5</a>
+            <a class="pagination-item" href="#">6</a>
+            <a class="pagination-item" href="#">下一页</a>
+            <a class="pagination-item" href="{{ url_for('news.news_list', subset=subset_id, page=pagination.pages) }}">尾页</a>
+          </div>
     </div>
   </div>
 </main>
