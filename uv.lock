@@ -42,6 +42,15 @@ wheels = [
 ]
 
 [[package]]
+name = "dbutils"
+version = "3.1.1"
+source = { registry = "https://mirrors.huaweicloud.com/repository/pypi/simple" }
+sdist = { url = "https://mirrors.huaweicloud.com/repository/pypi/packages/da/d5/ad1aa0fd519d328405c7c549174a71d6480216da05187dbc9cb413bad6ce/dbutils-3.1.1.tar.gz", hash = "sha256:ade79fbc5786d7496d4138722fbca24340cf7c73b5d66df05296f656ff086bbf" }
+wheels = [
+    { url = "https://mirrors.huaweicloud.com/repository/pypi/packages/f8/18/e4261a2b96d1387c16273dccf74bb88e3ecfe7061ea589655426aca6c3d1/dbutils-3.1.1-py3-none-any.whl", hash = "sha256:edc8ebd8445094c335d52e2bcbcf9f7dcc54d7a294adf7d01a8baf21924317f5" },
+]
+
+[[package]]
 name = "flask"
 version = "3.1.1"
 source = { registry = "https://mirrors.huaweicloud.com/repository/pypi/simple" }
@@ -240,6 +249,7 @@ name = "sxzslz-flask"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "dbutils" },
     { name = "flask" },
     { name = "pydantic" },
     { name = "pymysql" },
@@ -248,6 +258,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "dbutils", specifier = ">=3.1.1" },
     { name = "flask", specifier = ">=3.1.1" },
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pymysql", specifier = ">=1.1.1" },

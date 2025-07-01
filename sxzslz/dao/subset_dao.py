@@ -16,36 +16,36 @@ class SubsetDao(Dao):
         super().__init__(table_name, primary_key_name)
 
     def add(self, subset_name: str) -> bool:
-        sql: str = f"""INSERT INTO {self.table_name} (subset_name) VALUES (%s);"""
-        with Storage() as storage:
-            storage.save(sql, (subset_name,))  # type: ignore
+        sql: str = f"""INSERT INTO {self.table_name} (subset_name) VALUES (%s)"""
+        affected_rows: int = Storage.execute(sql, (subset_name,))
+        if 1 == affected_rows:
             return True
-        return False
+        else:
+            return False
 
     def update(self, subset_id: int, subset_name: str) -> bool:
         return True
 
     def query_one(self, subset_id: int) -> Subset | None:
         sql: str = f"SELECT * FROM {self.table_name} WHERE {self.primary_key_name} = %s"
-        with Storage() as storage:
-            result = storage.query_one(sql, subset_id)  # type: ignore
-            if result == None:
-                return None
-            else:
-                return Subset(
-                    subset_id=int(result["subset_id"]),
-                    subset_name=result["subset_name"],
-                )
+        result = Storage.query(sql, subset_id)
+        if () == result:
+            return None
+        else:
+            result = result[0]
+            return Subset(
+                subset_id=int(result["subset_id"]),
+                subset_name=result["subset_name"],
+            )
 
     def query_by_condition(self, page: int, limit: int) -> List[Subset]:
         offset: int = (page - 1) * limit
         sql: str = f"SELECT * FROM {self.table_name} ORDER BY subset_id LIMIT %s, %s "
-        with Storage() as storage:
-            results = storage.query_all(sql, (offset, limit))  # type: ignore
-            return [
-                Subset(
-                    subset_id=int(item["subset_id"]),
-                    subset_name=item["subset_name"],
-                )
-                for item in results
-            ]
+        results = Storage.query(sql, (offset, limit))
+        return [
+            Subset(
+                subset_id=int(item["subset_id"]),
+                subset_name=item["subset_name"],
+            )
+            for item in results
+        ]
