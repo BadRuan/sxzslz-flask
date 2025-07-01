@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
 from datetime import datetime
 
 
@@ -35,9 +35,3 @@ class Article(BaseModel):
     state: bool
     create_time: datetime
     read_count: int
-
-
-class Pagination(BaseModel):
-    pages: int
-    current: int
-    limit: int

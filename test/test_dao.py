@@ -53,7 +53,7 @@ def test_article_dao():
     count: int = dao.get_counts()
     assert count > 0
 
-    pages: int = dao.get_pages(10)
+    pages: int = dao.get_pages(1, 10)
     assert pages > 0
 
     article: Article | None = dao.query_one(10100)

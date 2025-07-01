@@ -36,10 +36,9 @@ class Dao(metaclass=ABCMeta):
         else:
             return True
 
-    def get_counts(self) -> int:
+    def get_counts(self, id: int) -> int:
         sql: str = f"SELECT COUNT(*) AS count FROM {self.table_name}"
         result: int = Storage.query(sql)[0]["count"]
-        logger.debug(result)
         return result
 
     def get_pages(self, page_size: int) -> int:

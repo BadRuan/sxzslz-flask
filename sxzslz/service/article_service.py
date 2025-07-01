@@ -39,14 +39,12 @@ class ArticleService(Service):
         page = check_num(page, 1)
         limit = check_num(limit, 15)
         subsetDao: Dao = SubsetDao()
-        counts: int = subsetDao.get_counts()
+        counts: int = subsetDao.get_counts(subset_id)
         if subset_id > counts:
             subset_id = 1
-        pages: int = self.get_pages(limit)
-        if page > pages:
-            page = pages
+
         return self._dao.query_by_condition(subset_id, page, limit)
 
     def query_one(self, id: int) -> Article | None:
         self._dao.add_read_count(id)  # type: ignore
-        return super().query_one(id)
+        return self.query_one(id)

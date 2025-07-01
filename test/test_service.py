@@ -38,7 +38,7 @@ def test_subset_service():
 def test_article_service():
     service: Service = ArticleService()
     count: int = service.get_counts()
-    pages: int = service.get_pages(10)
+    pages: int = service.get_pages(1, 10)
     users: List[Article] = service.query_by_page(1, 1, 10)
     logger.debug(f"Article count: {count}")
     assert count > 0

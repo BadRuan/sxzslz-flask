@@ -75,12 +75,28 @@ class ArticleDao(Dao):
                 read_count=result["read_count"],
             )
 
+    def get_counts(self, id: int) -> int:
+        sql: str = (
+            f"SELECT COUNT(*) AS count FROM {self.table_name} WHERE subset_id = %s"
+        )
+        result: int = Storage.query(sql, (id,))[0]["count"]
+        return result
+
     def query_by_condition(
         self, subset_id: int, page: int, limit: int
     ) -> List[Article]:
         offset: int = (page - 1) * limit
-        sql: str = f"SELECT * FROM {self.table_name} WHERE subset_id = %s LIMIT %s, %s"
-        results = Storage.query(sql, params=(subset_id, offset, limit))
+        sql: str = (
+            f"SELECT * FROM {self.table_name} WHERE subset_id = %s ORDER BY create_time DESC LIMIT %s OFFSET %s"
+        )
+        results = Storage.query(
+            sql,
+            params=(
+                subset_id,
+                limit,
+                offset,
+            ),
+        )
         return [
             Article(
                 article_id=int(item["article_id"]),

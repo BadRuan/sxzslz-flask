@@ -29,7 +29,7 @@ class UserService(Service):
         if user_id <= 0:
             return False
         else:
-            count: int = self.get_counts()
+            count: int = self.get_counts(0)
             if user_id > count:
                 return False
         return self._dao.update(user_id, new_hashed_password)

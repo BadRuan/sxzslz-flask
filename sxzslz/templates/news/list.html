@@ -34,17 +34,26 @@ content %}
         </li>
         {% endfor %}
       </ul>
-      <div class="pagination">
-            <a class="pagination-item" href="{{ url_for('news.news_list', subset=subset_id, page=1) }}">首页</a>
-            <a class="pagination-item" href="#">上一页</a>
-            <a class="pagination-item" href="#">1</a>
-            <a class="pagination-item" href="#">2</a>
-            <div class="pagination-item active">{{ pagination.current }}</div>
-            <a class="pagination-item" href="#">5</a>
-            <a class="pagination-item" href="#">6</a>
-            <a class="pagination-item" href="#">下一页</a>
-            <a class="pagination-item" href="{{ url_for('news.news_list', subset=subset_id, page=pagination.pages) }}">尾页</a>
+
+      
+      <div class="pagination"> 
+            {% if paginator.has_prev %}
+              <a class="pagination-item" href="{{ paginator.get_page_url(paginator.prev_num) }}">上一页</a>
+            {% endif %}
+
+            {% for page_num in paginator.iter_pages() %}
+                {% if page_num == paginator.page %}
+                    <div class="pagination-item active">{{ page_num }}</div>
+                {% else %}
+                    <a class="pagination-item" href="{{ paginator.get_page_url(page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if paginator.has_next %}
+            <a class="pagination-item" href="{{ paginator.get_page_url(paginator.next_num) }}">下一页</a>
+            {% endif %}
           </div>
+        
     </div>
   </div>
 </main>

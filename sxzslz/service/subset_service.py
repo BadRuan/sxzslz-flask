@@ -19,7 +19,7 @@ class SubsetService(Service):
         if subset_id <= 0:
             return False
         else:
-            count: int = self.get_counts()
+            count: int = self.get_counts(0)
             if subset_id > count:
                 return False
         return self._dao.update(subset_id, subset_name)
