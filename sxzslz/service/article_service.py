@@ -47,4 +47,4 @@ class ArticleService(Service):
 
     def query_one(self, id: int) -> Article | None:
         self._dao.add_read_count(id)  # type: ignore
-        return self.query_one(id)
+        return self._dao.query_one(id)  # type: ignore

@@ -1,8 +1,10 @@
 from flask import Flask, redirect, url_for
+from sxzslz.utils.storage import Storage
 
 
 def create_app():
     app = Flask(__name__)
+    Storage.init_pool()
 
     from sxzslz.news import bp as news
 

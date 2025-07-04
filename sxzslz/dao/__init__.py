@@ -14,7 +14,6 @@ class Dao(metaclass=ABCMeta):
     def __init__(self, table_name: str, primary_key_name: str):
         self.table_name: str = table_name
         self.primary_key_name: str = primary_key_name
-        Storage.init_pool()
 
     @abstractmethod
     def add(self, *args, **kwargs) -> bool: ...
