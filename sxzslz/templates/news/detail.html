@@ -8,7 +8,7 @@ content %}
       <div class="desc1">
         发布时间：{{ article.create_time.strftime("%Y-%m-%d %H:%M:%S") }}
       </div>
-      <div class="desc2">编辑： {{ article.nick_name }}</div>
+      <div class="desc2">编辑：{{ user.nick_name }}</div>
       <div class="desc3">浏览次数：{{ article.read_count }}</div>
     </div>
     <div>{{ article.content | safe }}</div>

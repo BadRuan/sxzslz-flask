@@ -1,13 +1,11 @@
-from sxzslz.dao import Dao
+from sxzslz.model import User
 from sxzslz.dao.user_dao import UserDao
-from sxzslz.service import Service
 
 
-class UserService(Service):
+class UserService:
 
     def __init__(self):
-        super().__init__()
-        self._dao: Dao = UserDao()
+        self._dao: UserDao = UserDao()
 
     def add(
         self, user_name: str, nick_name: str, password: str, avatar_src: str
@@ -25,11 +23,8 @@ class UserService(Service):
         else:
             return False
 
-    def update(self, user_id: int, new_hashed_password: str) -> bool:
+    def query_one(self, user_id: int) -> User | None:
         if user_id <= 0:
-            return False
+            return None
         else:
-            count: int = self.get_counts(0)
-            if user_id > count:
-                return False
-        return self._dao.update(user_id, new_hashed_password)
+            return self._dao.query_one(user_id)

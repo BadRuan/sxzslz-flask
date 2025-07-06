@@ -23,9 +23,6 @@ class SubsetDao(Dao):
         else:
             return False
 
-    def update(self, subset_id: int, subset_name: str) -> bool:
-        return True
-
     def query_one(self, subset_id: int) -> Subset | None:
         sql: str = f"SELECT * FROM {self.table_name} WHERE {self.primary_key_name} = %s"
         result = Storage.query(sql, subset_id)

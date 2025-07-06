@@ -28,10 +28,7 @@ class Article(BaseModel):
     article_id: int
     user_id: int
     subset_id: int
-    nick_name: str | None
-    subset_name: str | None
     title: str
     content: str | None
-    state: bool
     create_time: datetime
     read_count: int

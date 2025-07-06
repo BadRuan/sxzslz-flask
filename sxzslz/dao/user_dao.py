@@ -5,13 +5,15 @@ from sxzslz.model import User
 from sxzslz.utils.logger import Logger
 
 
+table_name: str = "user"
+primary_key_name: str = "user_id"
 logger = Logger(__name__)
 
 
 class UserDao(Dao):
 
     def __init__(self):
-        super().__init__("user", "user_id")
+        super().__init__(table_name, primary_key_name)
 
     def add(
         self, user_name: str, nick_name: str, password: str, avatar_src: str
@@ -29,8 +31,6 @@ class UserDao(Dao):
             return True
         else:
             return False
-
-    def update(self, user_id: int, new_hashed_password: str) -> bool: ...
 
     def query_one(self, user_id: int) -> User | None:
         sql: str = f"SELECT * FROM {self.table_name} WHERE {self.primary_key_name} = %s"

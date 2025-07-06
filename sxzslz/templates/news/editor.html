@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block link %}
+<script src="{{ url_for('static',filename='/js/@wangeditor.js') }}"></script>
+<link
+  href="{{ url_for('static', filename='css/editor@5.1.23.css') }}"
+  rel="stylesheet"
+/>
+{% endblock %}{% block title %}文章编辑{% endblock %} {% block content %}
+
+{% with message = get_flashed_messages() %}
+<h3>{{ message[0] }}</h3>
+{% endwith%}
+<main>
+  <form  action="{{ url_for("news.news_edit") }}" method="post" >
+    {{ form.hidden_tag() }}
+    {{ form.title.label }} <br />
+    {{ form.title(size=20) }}<br />
+    {{ form.subset_id.label }} <br />
+    {{ form.subset_id() }}
+    {{ form.content() }}<br />
+    <div class="editor—wrapper">
+    <div class="toolbar-container"><!-- 工具栏 --></div>
+    <div class="editor-container"><!-- 编辑器 --></div>
+  </div>
+    <!-- 存储编辑器内容 -->
+    {{ form.submit() }}
+  </form>
+  
+  <script>
+      const { createEditor, createToolbar } = window.wangEditor
+      const content = document.getElementById("content");
+      
+      const editorConfig = {
+        placeholder: '请输入文章内容',
+        onChange(editor) {
+          content.value = editor.getHtml()
+        },
+      }
+
+      const editor = createEditor({
+        selector: '.editor-container',
+        html: '<p><br></p>',
+        config: editorConfig,
+        mode: 'default', // or 'simple'
+      })
+
+      const toolbarConfig = {}
+
+      const toolbar = createToolbar({
+        editor,
+        selector: '.toolbar-container',
+        config: toolbarConfig,
+        mode: 'default', // or 'simple'
+      })
+    </script>
+</main>
+{% endblock %}

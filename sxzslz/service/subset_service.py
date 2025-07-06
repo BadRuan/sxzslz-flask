@@ -1,13 +1,12 @@
-from sxzslz.dao import Dao
+from typing import List
+from sxzslz.model import Subset
 from sxzslz.dao.subset_dao import SubsetDao
-from sxzslz.service import Service
 
 
-class SubsetService(Service):
+class SubsetService:
 
     def __init__(self):
-        super().__init__()
-        self._dao: Dao = SubsetDao()
+        self._dao: SubsetDao = SubsetDao()
 
     def add(
         self,
@@ -15,11 +14,5 @@ class SubsetService(Service):
     ) -> bool:
         return self._dao.add(subset_name)
 
-    def update(self, subset_id: int, subset_name: str) -> bool:
-        if subset_id <= 0:
-            return False
-        else:
-            count: int = self.get_counts(0)
-            if subset_id > count:
-                return False
-        return self._dao.update(subset_id, subset_name)
+    def query_by_page(self, page: int, limit: int) -> List[Subset]:
+        return self._dao.query_by_condition(page, limit)

@@ -17,27 +17,19 @@ class ArticleDao(Dao):
     def __init__(self):
         super().__init__(table_name, primary_key_name)
 
-    def add(  # type: ignore
-        self,
-        subset_id: int,
-        user_id: int,
-        title: str,
-        content: str,
-        img_src: str,
-        state: bool,
-    ) -> bool:
+    def add(self, subset_id: int, user_id: int, title: str, content: str) -> bool:
         sql: str = f"""INSERT INTO {self.table_name}
-                    (subset_id, user_id, title, content, img_src, state) 
-                    VALUES (%s, %s, %s, %s, %s, %s)"""
+                    (subset_id, user_id, title, content) 
+                    VALUES (%s, %s, %s, %s)"""
         affected_rows: int = Storage.execute(
-            sql, params=(subset_id, user_id, title, content, img_src, state)
+            sql, params=(subset_id, user_id, title, content)
         )
         if 1 == affected_rows:
             return True
         else:
             return False
 
-    def update(self, article_id: int, title: str, content: str):  # type: ignore
+    def update(self, article_id: int, title: str, content: str):
         sql: str = f"""UPDATE {self.table_name}
                             SET title = %s, content = %s
                             WHERE article_id = '{article_id}'"""
@@ -66,20 +58,17 @@ class ArticleDao(Dao):
                 article_id=int(result["article_id"]),
                 subset_id=int(result["subset_id"]),
                 user_id=int(result["user_id"]),
-                nick_name=user.nick_name,  # type: ignore
-                subset_name=subset.subset_name,  # type: ignore
                 title=result["title"],
                 content=result["content"],
-                state=bool(result["state"]),
                 create_time=result["create_time"],
                 read_count=result["read_count"],
             )
 
-    def get_counts(self, id: int) -> int:
+    def get_counts(self, subset_id: int) -> int:  # type: ignore
         sql: str = (
             f"SELECT COUNT(*) AS count FROM {self.table_name} WHERE subset_id = %s"
         )
-        result: int = Storage.query(sql, (id,))[0]["count"]
+        result: int = Storage.query(sql, (subset_id,))[0]["count"]
         return result
 
     def query_by_condition(
@@ -102,11 +91,8 @@ class ArticleDao(Dao):
                 article_id=int(item["article_id"]),
                 subset_id=int(item["subset_id"]),
                 user_id=int(item["user_id"]),
-                nick_name=None,
-                subset_name=None,
                 title=item["title"],
                 content=None,
-                state=bool(item["state"]),
                 create_time=item["create_time"],
                 read_count=item["read_count"],
             )

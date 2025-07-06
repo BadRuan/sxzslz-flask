@@ -1,9 +1,12 @@
-from flask import Blueprint, render_template, request, abort
 from typing import List
-from sxzslz.model import Subset, Article
+from flask import Blueprint, render_template, request, abort, redirect, url_for, flash
+from flask_wtf import FlaskForm
+from wtforms import SubmitField, StringField, RadioField
+from wtforms.validators import DataRequired, Length
+from sxzslz.model import User, Subset, Article
 from sxzslz.utils.logger import Logger
 from sxzslz.utils.pagination import Paginator
-from sxzslz.service import Service
+from sxzslz.service.user_service import UserService
 from sxzslz.service.subset_service import SubsetService
 from sxzslz.service.article_service import ArticleService
 
@@ -17,8 +20,8 @@ def news_list():
     subset_id: int = int(request.args.get("subset", 1))
     page: int = int(request.args.get("page", 1))
     limit: int = int(request.args.get("limit", 10))
-    subset_service: Service = SubsetService()
-    article_service: Service = ArticleService()
+    subset_service: SubsetService = SubsetService()
+    article_service: ArticleService = ArticleService()
     subsets: List[Subset] = subset_service.query_by_page(1, 10)
     articles: List[Article] = article_service.query_by_page(subset_id, page, limit)
     total = article_service.get_counts(subset_id)
@@ -40,13 +43,48 @@ def news_list():
 
 @bp.get("/detail/<int:article_id>/")
 def news_detail(article_id: int):
-    article_service: Service = ArticleService()
+    article_service: ArticleService = ArticleService()
     article: Article | None = article_service.query_one(article_id)
     if article is None:
         abort(404)
-    return render_template("news/detail.html", article=article)
+    else:
+        user_service: UserService = UserService()
+        user: User | None = user_service.query_one(article.user_id)
+    return render_template("news/detail.html", article=article, user=user)
 
 
-@bp.get("/edit/")
+class ArticleForm(FlaskForm):
+    # 获取文章类别
+    subset_service: SubsetService = SubsetService()
+    subsets = subset_service.query_by_page(1, 10)
+    subsets = tuple([(subset.subset_id, subset.subset_name) for subset in subsets])
+
+    title = StringField(
+        "文章标题: ",
+        validators=[
+            DataRequired(),
+            Length(4, 20),
+        ],
+    )
+    subset_id = RadioField(
+        "文章类别: ",
+        validators=[
+            DataRequired(),
+        ],
+        choices=(subsets),
+    )
+    content = StringField(render_kw={"id": "content", "type": "hidden"})
+    submit = SubmitField("立即发布")
+
+
+@bp.route("/edit/", methods=["GET", "POST"])
 def news_edit():
-    return render_template("news/edit.html")
+    form = ArticleForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        subset_id = form.subset_id.data
+        content = form.content.data
+        article_service: ArticleService = ArticleService()
+        article_service.add(int(subset_id), 1, title=title, content=content)  # type: ignore
+        return redirect(url_for("news.news_list"))
+    return render_template("news/editor.html", form=form)
