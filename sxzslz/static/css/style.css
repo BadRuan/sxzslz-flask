@@ -263,6 +263,51 @@ main .editor-container {
   height: 900px;
 }
 
+main .station_name {
+  text-align: center;
+  font-size: 1.8em;
+  color: #c7000b;
+}
+
+main .station .basic .chp_title {
+  margin: 12px 0;
+  border-left: 4px solid #c7000b;
+  padding-left: 4px;
+}
+
+main .station .basic .chp_title .eng_txt {
+  color: #6b7785;
+  font-size: 0.8em;
+}
+
+main .station .basic .chp_title .chi_txt {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+main .station .basic .station_con {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+main .station .basic .station_con .section {
+  margin: 20px 0;
+}
+
+main .station .basic .station_con .section .sec_item {
+  margin: 16px 0;
+  font-size: 1.2em;
+}
+
+main .station .basic .station_con .section .sec_item .s1 {
+  color: #272e3b;
+}
+
+main .station .basic .station_con .section .sec_item .s2 {
+  font-weight: bold;
+}
+
 footer {
   background-color: #8d8d8d;
 }
@@ -276,3 +321,5 @@ footer div {
   color: #fff;
   text-align: center;
 }
+
+/*# sourceMappingURL=style.css.map */

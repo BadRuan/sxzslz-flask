@@ -9,9 +9,11 @@ def create_app():
 
     from sxzslz.news import bp as news
     from sxzslz.auth import bp as auth
+    from sxzslz.station import bp as station
 
     app.register_blueprint(news)
     app.register_blueprint(auth)
+    app.register_blueprint(station)
 
     @app.get("/")
     def index():

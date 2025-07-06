@@ -1,0 +1,189 @@
+{% extends "base.html" %} {% block title %}新闻详情{% endblock %} {% block
+content %}
+<main>
+  <h2 class="station_name">{{ station.station_name }}</h2>
+  <div class="station">
+    <div class="basic">
+      <div class="chp_title">
+        <span class="eng_txt">Basic situation</span>
+        <div class="chi_txt">基本情况</div>
+      </div>
+
+      <div class="station_con">
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">主管部门</span>
+            <span class="s2">鸠江区水务局</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">管理单位</span>
+            <span class="s2">芜湖市鸠江区沈巷镇水利站</span>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">泵站名称</span>
+            <span class="s2">{{ station.station_name }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">泵站地址</span>
+            <span class="s2">{{ station.station_location }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="basic">
+      <div class="chp_title">
+        <span class="eng_txt">Engineering situation</span>
+        <div class="chi_txt">工程情况</div>
+      </div>
+
+      <div class="station_con">
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">建站年份</span>
+            <span class="s2">{{ station.birth_day }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">所在流域</span>
+            <span class="s2">{{ station.suozailiuyu }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">装 机</span>
+            <span class="s2">{{ station.zhuangji }} 台套</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">泵站功能</span>
+            <span class="s2">{{ station.bengzhangongneng }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">设计排涝扬程</span>
+            <span class="s2">{{ station.shejipailaoyangchen }}m</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">改造（建）年份</span>
+            <span class="s2">{{ station.gaizaonianfen }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">所在水系</span>
+            <span class="s2">{{ station.suozaishuixi }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">总容量</span>
+            <span class="s2">{{ station.zongrongliang }} kw</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">收益范围</span>
+            <span class="s2">{{ station.shouyifanwei }}km<sup>2</sup></span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">设计排涝进水位</span>
+            <span class="s2">{{ station.shejipailaoshuiwei }} m</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">改造类型</span>
+            <span class="s2">{{ station.gailaoleixing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">所在圩口</span>
+            <span class="s2">{{ station.suozaiweikou }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">流 量</span>
+            <span class="s2"
+              >{{ station.liuliang }} m<sup>3</sup>/<sub>s</sub></span
+            >
+          </div>
+          <div class="sec_item">
+            <span class="s1">收益面积</span>
+            <span class="s2">{{ station.shouyimianji }} 万亩</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">排涝最高出水位</span>
+            <span class="s2">{{ station.pailaozuigaochushuiwei }} m</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="station_con">
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">变压器类型</span>
+            <span class="s2">{{ station.bianyaqi_leixing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">变压器型号</span>
+            <span class="s2">{{ station.bianyaqi_xinghao }}</span>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">电机类型</span>
+            <span class="s2">{{ station.dianji_leixing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">电机型号</span>
+            <span class="s2">{{ station.dianji_xinghao }}</span>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">水泵类型</span>
+            <span class="s2">{{ station.shuibeng_leixing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">水泵型号</span>
+            <span class="s2">{{ station.shuibeng_xinghao }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="station_con">
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">主机泵房类型</span>
+            <span class="s2">{{ station.zhujifang_leixing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">主机房面积</span>
+            <span class="s2">{{ station.zhujifang_mianji }} m<sup>2</sup></span>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">管理房结构形式</span>
+            <span class="s2">{{ station.guanlifang_leixing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">管理房面积</span>
+            <span class="s2"
+              >{{ station.guanlifang_mianji }} m<sup>2</sup></span
+            >
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec_item">
+            <span class="s1">压力箱长度</span>
+            <span class="s2">{{ station.yalixiang_changdu }} m</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">压力箱口径（m）</span>
+            <span class="s2">{{ station.yalixiang_koujing }}</span>
+          </div>
+          <div class="sec_item">
+            <span class="s1">压力箱结构</span>
+            <span class="s2">{{ station.yalixiang_jiegou }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
