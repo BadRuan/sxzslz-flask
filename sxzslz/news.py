@@ -63,7 +63,7 @@ class ArticleForm(FlaskForm):
         "文章标题: ",
         validators=[
             DataRequired(),
-            Length(4, 20),
+            Length(5, 48),
         ],
     )
     subset_id = RadioField(
@@ -74,7 +74,7 @@ class ArticleForm(FlaskForm):
         choices=(subsets),
     )
     content = StringField(render_kw={"id": "content", "type": "hidden"})
-    submit = SubmitField("立即发布")
+    submit = SubmitField("点击立即发布")
 
 
 @bp.route("/edit/", methods=["GET", "POST"])

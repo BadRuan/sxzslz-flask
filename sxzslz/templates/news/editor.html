@@ -1,28 +1,26 @@
 {% extends "base.html" %} {% block link %}
-<script src="{{ url_for('static',filename='/js/@wangeditor.js') }}"></script>
 <link
-  href="{{ url_for('static', filename='css/editor@5.1.23.css') }}"
-  rel="stylesheet"
-/>
-{% endblock %}{% block title %}文章编辑{% endblock %} {% block content %}
-
-{% with message = get_flashed_messages() %}
-<h3>{{ message[0] }}</h3>
-{% endwith%}
+      href="{{ url_for('static', filename='css/editor@5.1.23.css') }}"
+      rel="stylesheet"
+    />
+<script src="{{ url_for('static',filename='/js/@wangeditor.js') }}"></script>
+{% endblock %}{% block title %}发布新文章{% endblock %} {% block content %}
 <main>
-  <form  action="{{ url_for("news.news_edit") }}" method="post" >
+  <h2 class="edit_title">文章发布</h2>
+  <form class="editor" action="{{ url_for("news.news_edit") }}" method="post" >
     {{ form.hidden_tag() }}
     {{ form.title.label }} <br />
-    {{ form.title(size=20) }}<br />
+    {{ form.title(size=20,class="article_title") }}<br />
     {{ form.subset_id.label }} <br />
     {{ form.subset_id() }}
-    {{ form.content() }}<br />
+    <label for="title">文章正文: </label> <br />
+    {{ form.content() }}
     <div class="editor—wrapper">
     <div class="toolbar-container"><!-- 工具栏 --></div>
     <div class="editor-container"><!-- 编辑器 --></div>
   </div>
     <!-- 存储编辑器内容 -->
-    {{ form.submit() }}
+     <div class="button-container">{{ form.submit() }}</div>
   </form>
   
   <script>
