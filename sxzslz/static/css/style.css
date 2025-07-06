@@ -167,7 +167,8 @@ main .news-list .wrap2 .pagination {
   padding: 0 60px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
 }
 
 main .news-list .wrap2 .pagination .pagination-item {
