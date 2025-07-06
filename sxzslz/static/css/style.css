@@ -308,6 +308,197 @@ main .station .basic .station_con .section .sec_item .s2 {
   font-weight: bold;
 }
 
+main .home_page .section_1 {
+  display: flex;
+  flex-direction: row;
+}
+
+main .home_page .section_1 .news_area {
+  width: 600px;
+  height: auto;
+}
+
+main .home_page .section_1 .news_area .chp_title {
+  margin: 12px 0;
+  border-left: 4px solid #c7000b;
+  padding-left: 4px;
+}
+
+main .home_page .section_1 .news_area .chp_title .eng_txt {
+  color: #6b7785;
+  font-size: 0.8em;
+}
+
+main .home_page .section_1 .news_area .chp_title .chi_txt {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+main .home_page .section_1 .news_area .news_list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+main .home_page .section_1 .news_area .news_list .item {
+  border-bottom: 1px solid #e5e6eb;
+}
+
+main .home_page .section_1 .news_area .news_list .item .title {
+  color: #000;
+  padding-right: 16px;
+}
+
+main .home_page .section_1 .news_area .news_list .item .title a {
+  text-decoration: none;
+  color: #000;
+}
+
+main .home_page .section_1 .news_area .news_list .item .title a:hover {
+  color: #c7000b;
+}
+
+main .home_page .section_1 .news_area .news_list .item .date {
+  padding-right: 12px;
+  text-align: right;
+  color: #6b7785;
+  margin-bottom: 4px;
+}
+
+main .home_page .section_1 .notice_area .chp_title {
+  margin: 12px 0;
+  border-left: 4px solid #c7000b;
+  padding-left: 4px;
+}
+
+main .home_page .section_1 .notice_area .chp_title .eng_txt {
+  color: #6b7785;
+  font-size: 0.8em;
+}
+
+main .home_page .section_1 .notice_area .chp_title .chi_txt {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+main .home_page .section_1 .notice_area .list {
+  width: 380px;
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+main .home_page .section_1 .notice_area .list .item {
+  border-bottom: 1px solid #e5e6eb;
+}
+
+main .home_page .section_1 .notice_area .list .item .title a {
+  text-decoration: none;
+  color: #000;
+}
+
+main .home_page .section_1 .notice_area .list .item .title a:hover {
+  color: #c7000b;
+}
+
+main .home_page .section_1 .notice_area .list .item .date {
+  text-align: right;
+  color: #6b7785;
+}
+
+main .home_page .section_2 {
+  display: flex;
+  flex-direction: row;
+}
+
+main .home_page .section_2 .station_area {
+  width: 600px;
+  height: auto;
+}
+
+main .home_page .section_2 .station_area .chp_title {
+  margin: 12px 0;
+  border-left: 4px solid #c7000b;
+  padding-left: 4px;
+}
+
+main .home_page .section_2 .station_area .chp_title .eng_txt {
+  color: #6b7785;
+  font-size: 0.8em;
+}
+
+main .home_page .section_2 .station_area .chp_title .chi_txt {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+main .home_page .section_2 .station_area .station_list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  justify-items: center;
+  align-items: center;
+}
+
+main .home_page .section_2 .station_area .station_list a {
+  text-decoration: none;
+  color: #000;
+  height: 40px;
+}
+
+main .home_page .section_2 .station_area .station_list a:hover {
+  color: #c7000b;
+}
+
+main .home_page .section_2 .file_area {
+  width: 400px;
+  height: auto;
+}
+
+main .home_page .section_2 .file_area .chp_title {
+  margin: 12px 0;
+  border-left: 4px solid #c7000b;
+  padding-left: 4px;
+}
+
+main .home_page .section_2 .file_area .chp_title .eng_txt {
+  color: #6b7785;
+  font-size: 0.8em;
+}
+
+main .home_page .section_2 .file_area .chp_title .chi_txt {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+main .home_page .section_2 .file_area .list {
+  width: 380px;
+  padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+main .home_page .section_2 .file_area .list .item {
+  border-bottom: 1px solid #e5e6eb;
+}
+
+main .home_page .section_2 .file_area .list .item .title a {
+  text-decoration: none;
+  color: #000;
+}
+
+main .home_page .section_2 .file_area .list .item .title a:hover {
+  color: #c7000b;
+}
+
+main .home_page .section_2 .file_area .list .item .date {
+  text-align: right;
+  color: #6b7785;
+}
+
 footer {
   background-color: #8d8d8d;
 }

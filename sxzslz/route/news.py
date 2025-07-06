@@ -1,5 +1,5 @@
 from typing import List
-from flask import Blueprint, render_template, request, abort, redirect, url_for, flash
+from flask import Blueprint, render_template, request, abort, redirect, url_for
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField, RadioField
 from wtforms.validators import DataRequired, Length
@@ -19,7 +19,7 @@ logger = Logger(__name__)
 def news_list():
     subset_id: int = int(request.args.get("subset", 1))
     page: int = int(request.args.get("page", 1))
-    limit: int = int(request.args.get("limit", 10))
+    limit: int = int(request.args.get("limit", 20))
     subset_service: SubsetService = SubsetService()
     article_service: ArticleService = ArticleService()
     subsets: List[Subset] = subset_service.query_by_page(1, 10)

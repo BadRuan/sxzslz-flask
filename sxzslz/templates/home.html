@@ -1,0 +1,87 @@
+{% extends "base.html" %} {% block title %}主页{% endblock %} {% block content
+%}
+<main>
+  <div class="home_page">
+    <div class="section_1">
+      <div class="news_area">
+        <div class="chp_title">
+          <span class="eng_txt">News</span>
+          <div class="chi_txt">泵站新闻</div>
+        </div>
+        <div class="news_list">
+          {% for item in news %}
+          <div class="item">
+            <div class="title">
+              <a
+                href="{{ url_for('news.news_detail', article_id=item.article_id) }}"
+                target="_blank"
+                >{{ item.title }}</a
+              >
+            </div>
+            <div class="date">{{ item.create_time.strftime("%Y-%m-%d")}}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="notice_area">
+        <div class="chp_title">
+          <span class="eng_txt">Notice</span>
+          <div class="chi_txt">通知公告</div>
+        </div>
+        <div class="list">
+          {% for item in notice %}
+          <div class="item">
+            <div class="title">
+              <a
+                href="{{ url_for('news.news_detail', article_id=item.article_id) }}"
+                target="_blank"
+                >{{ item.title }}</a
+              >
+            </div>
+            <div class="date">{{ item.create_time.strftime("%Y-%m-%d")}}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="section_2">
+      <div class="station_area">
+        <div class="chp_title">
+          <span class="eng_txt">Stations</span>
+          <div class="chi_txt">泵站信息</div>
+        </div>
+        <div class="station_list">
+          {% for item in stations %}
+          <a
+            href="{{ url_for('station.station', id=loop.index) }}"
+            target="_blank"
+            >{{ item.station_name }}</a
+          >
+          {% endfor %}
+        </div>
+      </div>
+      <div class="file_area">
+        <div class="chp_title">
+          <span class="eng_txt">Files</span>
+          <div class="chi_txt">制度文件</div>
+        </div>
+        <div class="list">
+          {% for item in file %}
+          <div class="item">
+            <div class="title">
+              <a
+                href="{{ url_for('news.news_detail', article_id=item.article_id) }}"
+                target="_blank"
+                >{{ item.title }}</a
+              >
+            </div>
+            <div class="date">{{ item.create_time.strftime("%Y-%m-%d")}}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
