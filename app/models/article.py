@@ -1,0 +1,63 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING, Dict
+from datetime import datetime
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
+from . import Base
+if TYPE_CHECKING:
+    from .user import User
+    from .category import Category
+    from .content import Content
+    
+
+class Article(Base):
+    __tablename__: str = "articles"
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(200), nullable=False)
+    
+    is_public: Mapped[bool] = mapped_column(Boolean, default=False)
+    view_count: Mapped[int] = mapped_column(Integer, default=0)
+    created: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+    
+    # 外键
+    category_id: Mapped[int] = mapped_column(
+        Integer, 
+        ForeignKey("categories.id", ondelete="CASCADE"), 
+        nullable=False
+    )
+    user_id: Mapped[int] = mapped_column(
+        Integer, 
+        ForeignKey("users.id", ondelete="CASCADE"), 
+        nullable=False
+    )
+
+    # 关系映射
+    user: Mapped[User] = relationship("User", back_populates="articles")
+    category: Mapped[Category] = relationship("Category",back_populates="articles")
+    
+    content: Mapped[Content] = relationship(
+        "Content",
+        back_populates="article", 
+        uselist=False, 
+        cascade="all, delete-orphan",
+        lazy="select"
+    )
+    
+    def __repr__(self) -> str:
+        return f"<Article {self.title}>"
+    
+    def to_dict_with_relations(self) -> Dict:
+        """包含用户和分类信息的字典表示"""
+        return {
+            "文章编号": self.id,
+            "文章标题": self.title,
+            "分类名称": self.category.name if self.category else None,
+            "作者昵称": self.user.nickname if self.user else None,
+            "是否公开": self.is_public,
+            "浏览次数": self.view_count,
+            "创建时间": self.created,
+            "更新时间": self.updated
+        }

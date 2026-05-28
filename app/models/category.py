@@ -1,0 +1,31 @@
+from typing import Dict
+from datetime import datetime
+from sqlalchemy import Integer, String, Text, Boolean, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
+from .base import Base
+
+
+class Category(Base):
+    __tablename__: str = "categories"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    description: Mapped[str] = mapped_column(Text)
+    is_public: Mapped[bool] = mapped_column(Boolean, default=True)
+    created: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    articles = relationship("Article", back_populates="category")
+    
+    def __repr__(self) -> str:
+        return f"<Category {self.name}>"
+    
+    def to_dict(self) -> Dict:
+        return {
+            "分类编号": self.id,
+            "分类名称": self.name,
+            "分类描述": self.description,
+            "是否公开": self.is_public,
+            "创建时间": self.created
+        }
+        
