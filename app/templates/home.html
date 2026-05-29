@@ -38,63 +38,19 @@
                 <div class="h-px bg-gray-200 w-full mt-2"></div>
 
                 <div class="flex flex-col p-4 space-y-3">
-
+                    {% for article in articles %}
                     <div class="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
                         <a class="text-gray-800 hover:text-red-600 font-medium block overflow-hidden h-12 leading-relaxed"
                             href="#">
-                            鸠江区编办莅临沈巷镇水利站开展工作检查
+                            {{ article.title }}
                         </a>
                         <div class="flex flex-row justify-between mt-1">
-                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">泵站新闻</span>
-                            <span class="text-gray-400 text-xs">2025-07-23</span>
+                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">{{
+                                article.category.name}}</span>
+                            <span class="text-gray-400 text-xs">{{ article.created | datetime('%Y-%m-%d') }}</span>
                         </div>
                     </div>
-
-                    <div class="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <a class="text-gray-800 hover:text-red-600 font-medium block overflow-hidden h-12 leading-relaxed"
-                            href="#">
-                            鸠江区编办莅临沈巷镇水利站开展工作检查
-                        </a>
-                        <div class="flex flex-row justify-between mt-1">
-                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">泵站新闻</span>
-                            <span class="text-gray-400 text-xs">2025-07-23</span>
-                        </div>
-                    </div>
-
-                    <div class="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <a class="text-gray-800 hover:text-red-600 font-medium block overflow-hidden h-12 leading-relaxed"
-                            href="#">
-                            鸠江区编办莅临沈巷镇水利站开展工作检查
-                        </a>
-                        <div class="flex flex-row justify-between mt-1">
-                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">泵站新闻</span>
-                            <span class="text-gray-400 text-xs">2025-07-23</span>
-                        </div>
-                    </div>
-
-                    <div class="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <a class="text-gray-800 hover:text-red-600 font-medium block overflow-hidden h-12 leading-relaxed"
-                            href="#">
-                            鸠江区编办莅临沈巷镇水利站开展工作检查
-                        </a>
-                        <div class="flex flex-row justify-between mt-1">
-                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">泵站新闻</span>
-                            <span class="text-gray-400 text-xs">2025-07-23</span>
-                        </div>
-                    </div>
-
-
-                    <div class="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <a class="text-gray-800 hover:text-red-600 font-medium block overflow-hidden h-12 leading-relaxed"
-                            href="#">
-
-                        </a>
-                        <div class="flex flex-row justify-between mt-1">
-                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">泵站新闻</span>
-                            <span class="text-gray-400 text-xs">2025-07-23</span>
-                        </div>
-                    </div>
-
+                    {% endfor %}
                 </div>
             </div>
 

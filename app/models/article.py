@@ -1,14 +1,13 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Dict
 from datetime import datetime
-from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Integer, Text, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from . import Base
 if TYPE_CHECKING:
     from .user import User
     from .category import Category
-    from .content import Content
     
 
 class Article(Base):
@@ -60,4 +59,26 @@ class Article(Base):
             "浏览次数": self.view_count,
             "创建时间": self.created,
             "更新时间": self.updated
+        }
+
+class Content(Base):
+    __tablename__: str = "contents"
+
+    id: Mapped[int] = mapped_column(ForeignKey('articles.id'), primary_key=True)
+    markdown: Mapped[str] = mapped_column(Text, nullable=False)
+    html: Mapped[str] = mapped_column(Text)
+    
+    article: Mapped[Article] = relationship(
+        "Article",
+        back_populates="content"
+    )
+    
+    def __repr__(self) -> str:
+        return f"<Conent {self.id}>"
+    
+    def to_dict(self) -> Dict:
+        return {
+            "内容编号": self.id,
+            "Markdown内容": self.markdown[:100] + "..." if len(self.markdown) > 100 else self.markdown,
+            "HTML内容长度": len(self.html) if self.html else 0
         }

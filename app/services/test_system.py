@@ -1,6 +1,6 @@
 from app.database import init_db
 from app.models import User, Category, Article, Content
-from app.crud import  create_user, create_category, get_all_categories, create_article, get_latest_article
+from app.crud import  create_user, create_category, get_all_categories, get_public_categories, create_article, get_latest_article
 
 async def init_db_() -> None:
     await init_db()
@@ -40,3 +40,7 @@ async def insert_init_data() -> None:
 async def test_get_latest_article() -> None:
     for a in await get_latest_article(5):
         print(a.to_dict_with_relations())
+
+async def test_get_public_categories() -> None:
+    for c in await get_public_categories():
+        print(c)
