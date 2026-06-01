@@ -34,7 +34,10 @@ class Article(Base):
     )
 
     # 关系映射
-    user: Mapped[User] = relationship("User", back_populates="articles")
+    user: Mapped[User] = relationship(
+        "User", 
+        back_populates="articles",
+    )
     category: Mapped[Category] = relationship("Category",back_populates="articles")
     
     content: Mapped[Content] = relationship(

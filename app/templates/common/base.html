@@ -12,8 +12,6 @@
 
 <body class="bg-background">
     {% include 'common/header.html' %}
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+    {% block content %}{% endblock %}
+    {% include 'common/footer.html' %}
 </body>

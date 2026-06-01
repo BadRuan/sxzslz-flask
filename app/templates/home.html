@@ -3,58 +3,204 @@
 {% block title %}主页{% endblock %}
 
 {% block content %}
-<div class="bg-hero-gradient py-4">
+<main class="bg-background">
+    <section class="bg-hero-gradient py-6">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
 
-    <div class="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            <div class="md:col-span-2 bg-white rounded-sm shadow-sm flex flex-col">
-                <div class="h-14 my-2 px-4 flex flex-row items-center">
-                    <div class="bg-red-600 h-10 w-0.5 rotate-20"></div>
-                    <div class="bg-red-600 h-10 w-0.5 mx-1 rotate-20"></div>
-                    <div class="mx-2 flex flex-col">
-                        <div class="text-xs text-gray-500">Import News</div>
-                        <div class="text-xl font-semibold">水利站要闻</div>
-                    </div>
-                </div>
-                <a href="#" class="block px-4 pb-4">
-                    <img class="w-full rounded-sm object-cover" src="static/pic/banner.jpg" alt="picture">
-                </a>
-            </div>
-
-            <div class="md:col-span-1 bg-white flex flex-col rounded-sm shadow-sm">
-                <div class="flex flex-row justify-between items-center px-4 pt-4">
-                    <div class="flex flex-row items-center">
-                        <div class="bg-red-600 h-10 w-0.5 rotate-20"></div>
-                        <div class="bg-red-600 h-10 w-0.5 mx-1 rotate-20"></div>
-                        <div class="mx-2 flex flex-col">
-                            <div class="text-xs text-gray-500">Fast News</div>
-                            <div class="text-xl font-semibold">水利站快讯</div>
+                <!-- 左侧：要闻轮播 -->
+                <div class="md:col-span-2 bg-white rounded-lg shadow-xs ring-1 ring-border overflow-hidden">
+                    <!-- 模块标题 -->
+                    <div class="flex items-center px-5 py-4 border-b border-border">
+                        <span class="h-5 w-1 rounded bg-primary mr-3"></span>
+                        <div>
+                            <p class="text-xs text-gray-500">Import News</p>
+                            <h2 class="text-lg font-semibold text-gray-900">水利站要闻</h2>
                         </div>
                     </div>
-                    <a class="text-sm text-gray-700 hover:text-red-600" href="#">更多 >></a>
+
+                    <!-- 轮播主体 -->
+                    <div id="carousel" class="relative group">
+                        <!-- 幻灯片 -->
+                        <div class="relative aspect-[16/9] overflow-hidden">
+                            <!-- Slide 1 -->
+                            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100"
+                                data-slide="0">
+                                <a href="#" class="block h-full">
+                                    <img src="./static/pic/banner.jpg" class="w-full h-full object-cover" />
+                                    <div
+                                        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5">
+                                        <h3 class="text-white text-lg font-semibold">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</h3>
+                                        <p class="text-gray-300 text-sm mt-1">2025‑07‑23</p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0"
+                                data-slide="1">
+                                <a href="#" class="block h-full">
+                                    <img src="static/pic/banner.jpg" class="w-full h-full object-cover" />
+                                    <div
+                                        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5">
+                                        <h3 class="text-white text-lg font-semibold">水利工程标准化管理暨安全生产工作会议召开</h3>
+                                        <p class="text-gray-300 text-sm mt-1">2025‑07‑21</p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0"
+                                data-slide="2">
+                                <a href="#" class="block h-full">
+                                    <img src="static/pic/banner.jpg" class="w-full h-full object-cover" />
+                                    <div
+                                        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5">
+                                        <h3 class="text-white text-lg font-semibold">冬季检修全面启动 保障泵站安全运行</h3>
+                                        <p class="text-gray-300 text-sm mt-1">2025‑07‑19</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- 左箭头 -->
+                        <button id="prevBtn"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover:opacity-100 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <!-- 右箭头 -->
+                        <button id="nextBtn"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center text-gray-600 hover:text-primary opacity-0 group-hover:opacity-100 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="w-4 h-4">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <!-- 指示器 -->
+                        <div class="absolute bottom-4 right-4 flex gap-1.5">
+                            <button class="carousel-dot w-2 h-2 rounded-full bg-white opacity-100"
+                                data-index="0"></button>
+                            <button class="carousel-dot w-2 h-2 rounded-full bg-white opacity-60"
+                                data-index="1"></button>
+                            <button class="carousel-dot w-2 h-2 rounded-full bg-white opacity-60"
+                                data-index="2"></button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="h-px bg-gray-200 w-full mt-2"></div>
 
-                <div class="flex flex-col p-4 space-y-3">
-                    {% for article in articles %}
-                    <div class="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
-                        <a class="text-gray-800 hover:text-red-600 font-medium block overflow-hidden h-12 leading-relaxed"
-                            href="#">
-                            {{ article.title }}
+                <!-- 右侧：快讯 -->
+                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border flex flex-col">
+                    <div class="flex items-center justify-between px-5 py-4 border-b border-border">
+                        <div class="flex items-center">
+                            <span class="h-5 w-1 rounded bg-primary mr-3"></span>
+                            <div>
+                                <p class="text-xs text-gray-500">Fast News</p>
+                                <h2 class="text-lg font-semibold text-gray-900">水利站快讯</h2>
+                            </div>
+                        </div>
+                        <a href="{{ url_for('news.list') }}" class="text-sm text-gray-600 hover:text-primary">
+                            更多 &rsaquo;
                         </a>
-                        <div class="flex flex-row justify-between mt-1">
-                            <span class="text-gray-400 text-xs bg-gray-100 px-2 py-0.5 rounded">{{
-                                article.category.name}}</span>
-                            <span class="text-gray-400 text-xs">{{ article.created | datetime('%Y-%m-%d') }}</span>
-                        </div>
                     </div>
-                    {% endfor %}
-                </div>
-            </div>
 
+                    <ul class="divide-y divide-gray-200 px-5 py-4">
+                        {% for article in articles %}
+                        <li class="pb-3 last:pb-0">
+                            <a href="#" class="text-sm font-medium text-gray-800 hover:text-primary line-clamp-2">
+                                {{ article.title }}
+                            </a>
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                    {{
+                                    article.category.name}}
+                                </span>
+                                <time class="text-xs text-gray-400">{{ article.created | datetime('%Y-%m-%d') }}</time>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
         </div>
-    </div>
-</div>
+    </section>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const carousel = document.getElementById('carousel');
+
+        let current = 0;
+        const intervalTime = 5000;
+        let timer;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('opacity-100', i === index);
+                slide.classList.toggle('opacity-0', i !== index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('opacity-100', i === index);
+                dot.classList.toggle('opacity-60', i !== index);
+            });
+        }
+
+        function nextSlide() {
+            current = (current + 1) % slides.length;
+            showSlide(current);
+        }
+
+        function prevSlide() {
+            current = (current - 1 + slides.length) % slides.length;
+            showSlide(current);
+        }
+
+        function startAutoPlay() {
+            timer = setInterval(nextSlide, intervalTime);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(timer);
+            startAutoPlay();
+        }
+
+        // 箭头事件
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoPlay();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoPlay();
+        });
+
+        // 指示器
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                current = index;
+                showSlide(current);
+                resetAutoPlay();
+            });
+        });
+
+        // hover 控制
+        carousel.addEventListener('mouseenter', () => clearInterval(timer));
+        carousel.addEventListener('mouseleave', startAutoPlay);
+
+        startAutoPlay();
+    });
+</script>
 {% endblock %}

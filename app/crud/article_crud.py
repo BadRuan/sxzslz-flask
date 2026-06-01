@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from sqlalchemy import select, desc
 from sqlalchemy.orm import selectinload, joinedload
 from app.database import get_async_db
@@ -39,3 +39,17 @@ async def get_user_all_articles(user_id: int) -> List[Article]:
         )
         result = await s.execute(stmt)
         return list(result.scalars().all())
+
+async def get_article_detail(article_id: int) -> Optional[Article]:
+    async with get_async_db() as s:
+        stmt = (
+            select(Article)
+            .where(Article.id==article_id)
+            .options(
+                joinedload(Article.user),
+                joinedload(Article.category),
+                joinedload(Article.content)
+            )
+            )
+        result = await s.execute(stmt)
+        return result.scalar_one_or_none()

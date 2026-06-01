@@ -1,0 +1,82 @@
+{% extends "common/base.html" %}
+
+{% block title %}新闻列表{% endblock %}
+
+{% block content %}
+<main class="py-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col gap-8 lg:flex-row">
+
+            <!-- ========== 左侧：新闻分类 ========== -->
+            <aside class="lg:w-64 shrink-0">
+                <div class="rounded-lg bg-white p-4 shadow-xs ring-1 ring-border">
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3">新闻分类</h3>
+                    <nav class="flex flex-col space-y-1">
+                        {% for category in categories %}
+                        {% if category.id == category_id %}
+                        <!-- 当前选中 -->
+                        <a href="{{ url_for('news.list', category_id=category.id) }}"
+                            class="rounded-md bg-primary px-3 py-2 text-sm font-medium text-white">
+                            {{ category.name }}
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('news.list', category_id=category.id) }}"
+                            class="rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">
+                            {{ category.name }}
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ========== 右侧：新闻列表 ========== -->
+            <div class="flex-1 min-w-0">
+                <!-- 面包屑 -->
+                <div class="mb-4 text-sm text-gray-500">
+                    <a href="#" class="hover:text-primary">首页</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-gray-900">新闻中心</span>
+                </div>
+
+                <!-- 列表 -->
+                <div class="space-y-4">
+                    {% for news in news_list %}
+                    <article class="rounded-lg bg-white p-5 shadow-xs ring-1 ring-border hover:shadow-md transition">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <h2 class="text-base font-semibold text-gray-900 hover:text-primary">
+                                    <a href="{{ url_for('news.detail', article_id=news.id) }}">{{ news.title }}</a>
+                                </h2>
+                                <p class="mt-2 text-sm text-gray-600 line-clamp-2">
+                                    为进一步做好汛期安全防范工作，确保泵站设备正常运行，鸠江区编办一行于今日上午莅临我站开展专项检查...
+                                </p>
+                            </div>
+                            <time class="ml-4 shrink-0 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">{{
+                                news.created | datetime('%Y-%m-%d') }}</time>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+
+                <!-- ========== 分页 ========== -->
+                <nav class="mt-8 flex items-center justify-between border-t border-border pt-6" aria-label="Pagination">
+                    <div class="hidden sm:block">
+                        <p class="text-sm text-gray-700">
+                            共 <span class="font-medium">42</span> 条，
+                            第 <span class="font-medium">1</span> 页 / 共 <span class="font-medium">5</span> 页
+                        </p>
+                    </div>
+                    <div class="flex flex-1 justify-between sm:justify-end gap-2">
+                        <a href="#"
+                            class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">上一页</a>
+                        <a href="#"
+                            class="relative inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark">下一页</a>
+                    </div>
+                </nav>
+            </div>
+
+        </div>
+    </div>
+</main>
+{% endblock %}
