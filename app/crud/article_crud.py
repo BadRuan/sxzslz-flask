@@ -1,21 +1,23 @@
 from typing import List, Optional
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
 from sqlalchemy.orm import selectinload, joinedload
-from app.database import get_async_db
 from app.models import Article, Content
 
 
-async def create_article(article: Article, content: Content) -> Article:
-    async with get_async_db() as s:
-        s.add(article)
-        await s.flush()
+class ArticleCrud:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def create_article(self, article: Article, content: Content) -> Article:
+        self.session.add(article)
+        await self.session.flush()
         content.id = article.id
-        s.add(content)
-        await s.refresh(article)
+        self.session.add(content)
+        await self.session.refresh(article)
         return article
 
-async def get_latest_article(limit: int) -> List[Article]:
-    async with get_async_db() as session:
+    async def get_latest_article(self, limit: int) -> List[Article]:
         stmt = (
             select(Article)
             .where(Article.is_public == True) 
@@ -26,22 +28,19 @@ async def get_latest_article(limit: int) -> List[Article]:
             .order_by(desc(Article.created))
             .limit(limit)
             )
-        
-        result = await session.execute(stmt)
+        result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-async def get_user_all_articles(user_id: int) -> List[Article]:
-    async with get_async_db() as s:
+    async def get_user_all_articles(self, user_id: int) -> List[Article]:
         stmt = (
             select(Article).where(Article.user_id == user_id).options(
                 selectinload(Article.author)
             )
         )
-        result = await s.execute(stmt)
+        result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-async def get_article_detail(article_id: int) -> Optional[Article]:
-    async with get_async_db() as s:
+    async def get_article_detail(self, article_id: int) -> Optional[Article]:
         stmt = (
             select(Article)
             .where(Article.id==article_id)
@@ -51,5 +50,5 @@ async def get_article_detail(article_id: int) -> Optional[Article]:
                 joinedload(Article.content)
             )
             )
-        result = await s.execute(stmt)
+        result = await self.session.execute(stmt)
         return result.scalar_one_or_none()

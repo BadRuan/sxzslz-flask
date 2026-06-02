@@ -1,10 +1,11 @@
-from quart import Blueprint, render_template
-from app.crud import get_latest_article
+from quart import Blueprint, render_template, g
+from app.crud import ArticleCrud
 
 
 bp = Blueprint('home', __name__)
 
 @bp.route('/')
 async def index():
-    articles = await get_latest_article(5)
+    crud = ArticleCrud(g.db_session)
+    articles = await crud.get_latest_article(5)
     return await render_template('home.html', articles=articles)
