@@ -114,7 +114,7 @@
                     <ul class="divide-y divide-gray-200 px-5 py-4">
                         {% for article in articles %}
                         <li class="pb-3 last:pb-0">
-                            <a href="#" class="text-sm font-medium text-gray-800 hover:text-primary line-clamp-2">
+                            <a href="{{ url_for('news.detail', article_id=article.id) }}" class="text-sm font-medium text-gray-800 hover:text-primary line-clamp-2">
                                 {{ article.title }}
                             </a>
                             <div class="mt-2 flex items-center justify-between">

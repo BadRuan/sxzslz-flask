@@ -3,109 +3,115 @@
 {% block title %}新闻详情{% endblock %}
 
 {% block content %}
-<main class="py-8">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col lg:flex-row gap-8">
+<main class="bg-[var(--color-background)]">
+        <div class="min-h-screen py-10 px-4">
+            <nav class="max-w-6xl mx-auto mb-6 px-4 sm:px-6 lg:px-8" aria-label="Breadcrumb">
+                <ol class="flex items-center gap-2 text-sm text-gray-500">
+                    <li>
+                        <a href="{{ url_for('home.index') }}" class="hover:text-primary transition-colors">
+                            网站首页
+                        </a>
+                    </li>
+                    <li>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('news.list', category_id=news.category.id) }}" class="hover:text-primary transition-colors">
+                            {{ news.category.name }}
+                        </a>
+                    </li>
+                </ol>
+            </nav>
 
-            <!-- 左侧：正文 -->
-            <article class="flex-1 min-w-0 bg-white rounded-lg shadow-xs ring-1 ring-border p-6 lg:p-8">
-                <!-- 面包屑 -->
-                <div class="text-sm text-gray-500 mb-4">
-                    <a href="#" class="hover:text-primary">首页</a>
-                    <span class="mx-2">/</span>
-                    <a href="#" class="hover:text-primary">新闻中心</a>
-                    <span class="mx-2">/</span>
-                    <span class="text-gray-900">要闻动态</span>
+            <article
+                class="max-w-6xl mx-auto bg-white rounded-xl shadow-sm border border-[var(--color-border)] overflow-hidden">
+
+                <div class="px-6 sm:px-10 pt-10 pb-6 border-b border-[var(--color-border)] text-center">
+                    <!-- 新闻标题：居中，加大字重 -->
+                    <h1 class="text-3xl font-bold text-gray-900 leading-tight mb-4">
+                        {{ news.title }}
+                    </h1>
+                    <div
+                        class="flex items-center justify-center gap-4 text-sm text-gray-500 px-3 py-1 bg-gray-50 rounded-md inline-flex">
+                        <time datetime="2024-07-23">发布：{{ news.created | datetime('%Y-%m-%d') }}</time>
+                        <span class="hidden sm:inline">|</span>
+                        <span>来源：{{ news.user.nickname }}</span>
+                        <span class="hidden sm:inline">|</span>
+                        <span>阅读量：{{ news.view_count }}</span>
+                    </div>
                 </div>
 
-                <!-- 标题 -->
-                <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 leading-snug">
-                    {{ news.title }}
-                </h1>
-
-                <!-- 元信息 -->
-                <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">
-                    <span>发布时间：{{ news.created | datetime('%Y-%m-%d') }}</span>
-                    <span>作者：{{ news.user.nickname }}</span>
-                    <span>浏览次数：{{ news.view_count }}</span>
+                <div class="px-6 sm:px-10 py-8 prose prose-primary prose-lg max-w-none
+                        prose-headings:font-bold prose-headings:text-gray-900 prose-headings:mb-4 prose-headings:mt-8
+                        prose-h1:text-2xl prose-h2:text-xl prose-h2:border-l-2 prose-h2:border-[var(--color-primary-light)] prose-h2:pl-2
+                        prose-p:my-4 prose-p:leading-relaxed
+                        prose-strong:text-gray-900 prose-strong:font-semibold
+                        prose-blockquote:border-l-[var(--color-primary)] prose-blockquote:bg-red-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:rounded
+                        prose-ul:list-disc prose-ul:pl-5 prose-ul:my-4 prose-ul:text-gray-700
+                        prose-ol:list-decimal prose-ol:pl-5 prose-ol:my-4 prose-ol:text-gray-700
+                        prose-a:text-primary prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-primary/80
+                        ">
+                    {{ news.content.html | safe }}
                 </div>
 
-                <hr class="my-6 border-border" />
-
-                <!-- 正文内容（使用 prose 排版） -->
-                <div class="prose prose-sm sm:prose lg:prose-lg max-w-none text-gray-800">
-                    {{ news.content.html }}
-                </div>
-
-                <!-- 附件下载 -->
-                <div class="mt-8">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-3">附件下载</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-between rounded-lg border border-border px-4 py-3 hover:bg-gray-50 transition">
-                                <div class="flex items-center">
-                                    <span class="text-primary mr-3">📄</span>
-                                    <span class="text-sm text-gray-800">防汛检查工作方案.pdf</span>
+                <div class="not-prose px-6 sm:px-10 pb-10">
+                    <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center">
+                        <span class="w-1 h-5 bg-[var(--color-primary)] rounded-full mr-2"></span>
+                        附件下载
+                    </h3>
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <a href="#"
+                            class="group flex items-center justify-between rounded-lg border border-[var(--color-border)] px-4 py-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary-light)] transition-all duration-200">
+                            <div class="flex items-center min-w-0">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded bg-red-50 text-[var(--color-primary)] flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 Section 0 002 2z">
+                                        </path>
+                                    </svg>
                                 </div>
-                                <span class="text-xs text-gray-500">2.3 MB</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-between rounded-lg border border-border px-4 py-3 hover:bg-gray-50 transition">
-                                <div class="flex items-center">
-                                    <span class="text-primary mr-3">📄</span>
-                                    <span class="text-sm text-gray-800">设备巡检记录表.xlsx</span>
+                                <div class="min-w-0">
+                                    <span
+                                        class="block text-sm font-medium text-gray-900 truncate group-hover:text-[var(--color-primary)]">防汛检查工作方案.pdf</span>
+                                    <span class="block text-xs text-gray-500">2.3 MB</span>
                                 </div>
-                                <span class="text-xs text-gray-500">1.1 MB</span>
-                            </a>
-                        </li>
-                    </ul>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-[var(--color-primary)] transition-colors"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </a>
+                        <a href="#"
+                            class="group flex items-center justify-between rounded-lg border border-[var(--color-border)] px-4 py-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary-light)] transition-all duration-200">
+                            <div class="flex items-center min-w-0">
+                                <div
+                                    class="flex-shrink-0 w-8 h-8 rounded bg-green-50 text-green-600 flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <span
+                                        class="block text-sm font-medium text-gray-900 truncate group-hover:text-[var(--color-primary)]">设备巡检记录表.xlsx</span>
+                                    <span class="block text-xs text-gray-500">1.1 MB</span>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 group-hover:text-[var(--color-primary)] transition-colors"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </article>
-
-            <!-- 右侧：侧边栏 -->
-            <aside class="lg:w-72 shrink-0">
-                <!-- 相关新闻 -->
-                <div class="rounded-lg bg-white p-4 shadow-xs ring-1 ring-border">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-4">相关新闻</h3>
-                    <ul class="space-y-3">
-                        <li>
-                            <a href="#" class="text-sm text-gray-700 hover:text-primary line-clamp-2">
-                                水利工程标准化管理暨安全生产工作会议召开
-                            </a>
-                            <p class="text-xs text-gray-400 mt-1">2025-07-21</p>
-                        </li>
-                        <li>
-                            <a href="#" class="text-sm text-gray-700 hover:text-primary line-clamp-2">
-                                冬季检修全面启动 保障泵站安全运行
-                            </a>
-                            <p class="text-xs text-gray-400 mt-1">2025-07-19</p>
-                        </li>
-                        <li>
-                            <a href="#" class="text-sm text-gray-700 hover:text-primary line-clamp-2">
-                                关于进一步加强水资源管理的通知
-                            </a>
-                            <p class="text-xs text-gray-400 mt-1">2025-07-15</p>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-
         </div>
-
-        <!-- 上下篇导航 -->
-        <nav class="mt-8 flex flex-col sm:flex-row items-center justify-between border-t border-border pt-6">
-            <a href="#" class="flex items-center text-sm text-gray-600 hover:text-primary">
-                <span class="mr-2">←</span>
-                上一篇：水利工程标准化管理暨安全生产工作会议召开
-            </a>
-            <a href="#" class="mt-4 sm:mt-0 flex items-center text-sm text-gray-600 hover:text-primary">
-                下一篇：冬季检修全面启动 保障泵站安全运行
-                <span class="ml-2">→</span>
-            </a>
-        </nav>
-    </div>
-</main>
+    </main>
 {% endblock %}
