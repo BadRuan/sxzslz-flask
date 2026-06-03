@@ -16,4 +16,5 @@ class UserCrud:
 
     async def create_user(self, user: User) -> User:
         self.session.add(user)
+        await self.session.commit()
         return user

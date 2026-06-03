@@ -1,3 +1,4 @@
+from os import path, getcwd
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,3 +13,9 @@ class Settings(BaseSettings):
         )
 
 settings: Settings = Settings()
+
+class Upload_Config:
+    UPLOAD_FOLDER = path.join(getcwd(), 'uploads')
+    MAX_CONTENT_LENGTH: int = 16 * 1024 * 1024 # 最大16MB
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    

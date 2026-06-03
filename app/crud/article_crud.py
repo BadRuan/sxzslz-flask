@@ -15,6 +15,7 @@ class ArticleCrud:
         content.id = article.id
         self.session.add(content)
         await self.session.refresh(article)
+        await self.session.commit()
         return article
 
     async def get_latest_article(self, limit: int) -> List[Article]:

@@ -1,8 +1,9 @@
-from asyncio import get_event_loop
 from typing import Any
+from os import makedirs
 from quart import Quart, render_template, g
-from app.database import AsyncSessionLocal, async_engine
-from app.views import user_bp, home_bp, news_bp
+from app.settings import Upload_Config
+from app.database import AsyncSessionLocal
+from app.views import user_bp, home_bp, news_bp, image_bp
 
 
 def format_datetime(value, fmt="%Y-%m-%d"):
@@ -24,6 +25,7 @@ async def _safe_close_session(session: Any, exception: BaseException | None) -> 
 def create_app():
     app = Quart(__name__)
     
+    
     @app.before_request
     async def before_request() -> None:
         g.db_session = AsyncSessionLocal()
@@ -32,9 +34,11 @@ def create_app():
     app.config["DEBUG"] = True
     app.jinja_env.filters['datetime'] = format_datetime
     
+    makedirs(Upload_Config.UPLOAD_FOLDER, exist_ok=True)
     app.register_blueprint(user_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(news_bp, url_prefix='/news')
+    app.register_blueprint(image_bp, url_prefix='/image')
     
     @app.errorhandler(404)
     async def handle_404(error):

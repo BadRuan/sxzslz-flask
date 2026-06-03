@@ -34,7 +34,7 @@ async def get_async_db() -> AsyncGenerator[AsyncSession, None]:
 
 async def init_db() -> None:
     from .models.base import Base
-    from .models import User, Category, Article, Content
+    from .models import User, Category, Article, Content, Image
 
     async with async_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

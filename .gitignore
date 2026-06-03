@@ -6,5 +6,6 @@ wheels/
 .pytest_cache/
 *.egg-info
 logs/
+uploads/
 .venv
 .env
