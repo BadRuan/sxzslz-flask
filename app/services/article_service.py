@@ -8,7 +8,7 @@ class ArticleService:
         self.session = session
         self.crud = ArticleCrud(session)
         
-    async def create_aritcle(self,
+    async def create_article(self,
                              category_id: int,
                              user_id: int,
                              title: str,

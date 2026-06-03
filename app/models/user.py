@@ -28,10 +28,10 @@ class User(Base):
     
     def to_dict(self) -> Dict:
         return {
-            "用户编号": self.id,
-            "用户名": self.username,
-            "用户昵称": self.nickname,
-            "创建时间": self.created,
-            "更新时间": self.updated
+            "id": self.id,
+            "username": self.username,
+            "nickname": self.nickname,
+            "created": self.created,
+            "updated": self.updated
         }
         

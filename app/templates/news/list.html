@@ -63,15 +63,24 @@
                 <nav class="mt-8 flex items-center justify-between border-t border-border pt-6" aria-label="Pagination">
                     <div class="hidden sm:block">
                         <p class="text-sm text-gray-700">
-                            共 <span class="font-medium">42</span> 条，
-                            第 <span class="font-medium">1</span> 页 / 共 <span class="font-medium">5</span> 页
+                            共 <span class="font-medium">{{ total }}</span> 条，
+                            第 <span class="font-medium">{{ page }}</span> 页 / 共 <span class="font-medium">{{ total_pages }}</span> 页
                         </p>
                     </div>
                     <div class="flex flex-1 justify-between sm:justify-end gap-2">
-                        <a href="#"
+                        {% if page > 1 %}
+                        <a href="{{ url_for('news.list', category_id=category_id, page=page-1) }}"
                             class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">上一页</a>
-                        <a href="#"
+                        {% else %}
+                        <span class="relative inline-flex items-center rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-400 ring-1 ring-inset ring-gray-200 cursor-not-allowed">上一页</span>
+                        {% endif %}
+
+                        {% if page < total_pages %}
+                        <a href="{{ url_for('news.list', category_id=category_id, page=page+1) }}"
                             class="relative inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark">下一页</a>
+                        {% else %}
+                        <span class="relative inline-flex items-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-white cursor-not-allowed">下一页</span>
+                        {% endif %}
                     </div>
                 </nav>
             </div>

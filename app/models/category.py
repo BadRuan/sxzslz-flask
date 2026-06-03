@@ -22,10 +22,10 @@ class Category(Base):
     
     def to_dict(self) -> Dict:
         return {
-            "分类编号": self.id,
-            "分类名称": self.name,
-            "分类描述": self.description,
-            "是否公开": self.is_public,
-            "创建时间": self.created
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "is_public": self.is_public,
+            "created": self.created
         }
         

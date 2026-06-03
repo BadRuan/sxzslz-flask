@@ -54,19 +54,15 @@ async def upload_image():
     # 获取MIME类型
     mime_type = guess_type(filename)[0] or 'application/octet-stream'
     
-    # 使用Pillow处理图片（验证+可选压缩）
+    # 使用Pillow处理图片（验证+压缩）
     try:
         img = PILImage.open(file)
         width, height = img.size
-        
-        # 可选：压缩图片
+
+        # 转换为 RGB 并压缩保存
         img = img.convert('RGB')
         img.save(file_path, 'JPEG', quality=85, optimize=True)
-        
-        # 直接保存原图
-        file.seek(0)
-        img.save(file_path)
-        
+
     except Exception as e:
         return jsonify({'error': f'图片处理失败: {str(e)}'}), 400
     

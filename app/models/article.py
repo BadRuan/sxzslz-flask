@@ -54,14 +54,14 @@ class Article(Base):
     def to_dict_with_relations(self) -> Dict:
         """包含用户和分类信息的字典表示"""
         return {
-            "文章编号": self.id,
-            "文章标题": self.title,
-            "分类名称": self.category.name if self.category else None,
-            "作者昵称": self.user.nickname if self.user else None,
-            "是否公开": self.is_public,
-            "浏览次数": self.view_count,
-            "创建时间": self.created,
-            "更新时间": self.updated
+            "id": self.id,
+            "title": self.title,
+            "category_name": self.category.name if self.category else None,
+            "author_nickname": self.user.nickname if self.user else None,
+            "is_public": self.is_public,
+            "view_count": self.view_count,
+            "created": self.created,
+            "updated": self.updated
         }
 
 class Content(Base):
@@ -77,11 +77,11 @@ class Content(Base):
     )
     
     def __repr__(self) -> str:
-        return f"<Conent {self.id}>"
+        return f"<Content {self.id}>"
     
     def to_dict(self) -> Dict:
         return {
-            "内容编号": self.id,
-            "Markdown内容": self.markdown[:100] + "..." if len(self.markdown) > 100 else self.markdown,
-            "HTML内容长度": len(self.html) if self.html else 0
+            "id": self.id,
+            "markdown_preview": self.markdown[:100] + "..." if len(self.markdown) > 100 else self.markdown,
+            "html_length": len(self.html) if self.html else 0
         }

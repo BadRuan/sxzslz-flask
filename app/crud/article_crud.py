@@ -1,6 +1,6 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, func
 from sqlalchemy.orm import selectinload, joinedload
 from app.models import Article, Content
 
@@ -14,14 +14,14 @@ class ArticleCrud:
         await self.session.flush()
         content.id = article.id
         self.session.add(content)
+        await self.session.flush()
         await self.session.refresh(article)
-        await self.session.commit()
         return article
 
     async def get_latest_article(self, limit: int) -> List[Article]:
         stmt = (
             select(Article)
-            .where(Article.is_public == True) 
+            .where(Article.is_public == True)
             .options(
                 joinedload(Article.user),
                 joinedload(Article.category)
@@ -32,10 +32,43 @@ class ArticleCrud:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
+    async def get_articles_paginated(
+        self,
+        page: int = 1,
+        per_page: int = 10,
+        category_id: Optional[int] = None
+    ) -> Tuple[List[Article], int]:
+        """分页查询文章，返回 (文章列表, 总数)"""
+        # 基础查询条件
+        base_query = select(Article).where(Article.is_public == True)
+        if category_id is not None:
+            base_query = base_query.where(Article.category_id == category_id)
+
+        # 查询总数
+        count_stmt = select(func.count()).select_from(base_query.subquery())
+        total = (await self.session.execute(count_stmt)).scalar() or 0
+
+        # 分页查询
+        offset = (page - 1) * per_page
+        stmt = (
+            base_query
+            .options(
+                joinedload(Article.user),
+                joinedload(Article.category)
+            )
+            .order_by(desc(Article.created))
+            .offset(offset)
+            .limit(per_page)
+        )
+        result = await self.session.execute(stmt)
+        articles = list(result.scalars().all())
+
+        return articles, total
+
     async def get_user_all_articles(self, user_id: int) -> List[Article]:
         stmt = (
             select(Article).where(Article.user_id == user_id).options(
-                selectinload(Article.author)
+                selectinload(Article.user)
             )
         )
         result = await self.session.execute(stmt)

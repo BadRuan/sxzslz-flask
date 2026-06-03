@@ -1,7 +1,7 @@
 from typing import Dict
 from datetime import datetime
-from sqlalchemy import Integer, String, Text, Boolean, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Integer, String, DateTime
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from .base import Base
 
@@ -13,16 +13,16 @@ class Image(Base):
     # 存储的文件名
     filename: Mapped[str] = mapped_column(String(200), nullable=False)
     # 原始文件名
-    original_filename = mapped_column(String(200), nullable=False)
-    file_size = mapped_column(Integer, nullable=False)
+    original_filename: Mapped[str] = mapped_column(String(200), nullable=False)
+    file_size: Mapped[int] = mapped_column(Integer, nullable=False)
     # MIME类型
-    mime_type = mapped_column(String(100), nullable=False)
+    mime_type: Mapped[str] = mapped_column(String(100), nullable=False)
     upload_time: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    width = mapped_column(Integer)
-    height = mapped_column(Integer)
+    width: Mapped[int | None] = mapped_column(Integer)
+    height: Mapped[int | None] = mapped_column(Integer)
     
     def __repr__(self) -> str:
-        return f"<Image {self.file_name}>"
+        return f"<Image {self.filename}>"
     
     def to_dict(self) -> Dict:
         return {

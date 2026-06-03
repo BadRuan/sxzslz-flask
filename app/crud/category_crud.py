@@ -27,5 +27,5 @@ class CategoryCrud:
 
     async def create_category(self, category: Category) -> Category:
         self.session.add(category)
-        await self.session.commit()
+        await self.session.flush()
         return category

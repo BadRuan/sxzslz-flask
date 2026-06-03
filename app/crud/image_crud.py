@@ -25,5 +25,5 @@ class ImageCrud:
     
     async def save_image(self, image: Image) -> Image:
         self.session.add(image)
-        await self.session.commit()
+        await self.session.flush()
         return image
