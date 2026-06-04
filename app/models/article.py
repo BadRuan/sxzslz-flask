@@ -52,7 +52,6 @@ class Article(Base):
         return f"<Article {self.title}>"
     
     def to_dict_with_relations(self) -> Dict:
-        """包含用户和分类信息的字典表示"""
         return {
             "id": self.id,
             "title": self.title,

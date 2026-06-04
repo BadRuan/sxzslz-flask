@@ -1,4 +1,5 @@
 from os import path, getcwd
+from typing import Set
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,6 +8,10 @@ class Settings(BaseSettings):
     DB_ECHO: bool = False
     DEBUG: bool = False
     SECRET_KEY: str = "your-secret-key-change-in-production"
+    UPLOAD_FOLDER: str = path.join(getcwd(), 'uploads')
+    MAX_CONTENT_LENGTH: int = 16 * 1024 * 1024 # 最大16MB
+    ALLOWED_EXTENSIONS: Set[str] = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    
 
     model_config = SettingsConfigDict(
         env_file = ".env",
@@ -15,9 +20,3 @@ class Settings(BaseSettings):
         )
 
 settings: Settings = Settings()
-
-class Upload_Config:
-    UPLOAD_FOLDER = path.join(getcwd(), 'uploads')
-    MAX_CONTENT_LENGTH: int = 16 * 1024 * 1024 # 最大16MB
-    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
-    

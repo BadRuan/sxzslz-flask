@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 from datetime import datetime
 from sqlalchemy import Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship

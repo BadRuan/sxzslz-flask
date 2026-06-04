@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import markdown_to_html
 from app.models import Article, Content
-from app.crud import ArticleCrud, CategoryCrud
+from app.crud import ArticleCrud
+
 
 class ArticleService:
     def __init__(self, session: AsyncSession) -> None:

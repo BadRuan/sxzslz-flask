@@ -7,5 +7,6 @@ wheels/
 *.egg-info
 logs/
 uploads/
+alembic/
 .venv
 .env

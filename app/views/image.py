@@ -4,7 +4,7 @@ from uuid import uuid4
 from mimetypes import guess_type
 from PIL import Image as PILImage
 from quart import Blueprint, request, render_template, g, jsonify, send_from_directory
-from app.settings import Upload_Config
+from app.settings import settings
 from app.models import Image
 from app.crud import ImageCrud
 
@@ -15,7 +15,7 @@ bp = Blueprint('image', __name__)
 def allowed_file(filename):
     """检查文件类型是否允许"""
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in Upload_Config.ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in settings.ALLOWED_EXTENSIONS
 
 def generate_unique_filename(filename):
     """生成唯一文件名，防止冲突"""
@@ -44,7 +44,7 @@ async def upload_image():
     
     # 生成唯一文件名
     filename = generate_unique_filename(original_filename)
-    file_path = path.join(Upload_Config.UPLOAD_FOLDER, filename) 
+    file_path = path.join(settings.UPLOAD_FOLDER, filename) 
     
     # 获取文件信息
     file.seek(0, SEEK_END)
@@ -97,7 +97,7 @@ async def get_image_info(id: int):
 @bp.route('/<filename>')
 async def serve_image(filename: str):
     """提供图片访问"""
-    return await send_from_directory(Upload_Config.UPLOAD_FOLDER, filename)
+    return await send_from_directory(settings.UPLOAD_FOLDER, filename)
 
 # @app.route('/images', methods=['GET'])
 # async def list_images():

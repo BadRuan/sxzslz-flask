@@ -15,7 +15,6 @@ class UserCrud:
         return list(r)
 
     async def get_user_by_username(self, username: str) -> Optional[User]:
-        """根据用户名查找用户"""
         stmt = select(User).where(User.username == username)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
