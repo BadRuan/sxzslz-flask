@@ -1,11 +1,12 @@
 from quart import Blueprint, render_template, request, g
 from app.crud import CategoryCrud, ArticleCrud
+from app.services import ArticleService
 
 
-bp = Blueprint('news', __name__)
+bp = Blueprint('article', __name__)
 
-@bp.route('/list/')
-@bp.route('/list/<int:category_id>')
+@bp.route('/list/index.html')
+@bp.route('/list/<int:category_id>.html')
 async def list(category_id: int = 1):
     session = g.db_session
     category_crud = CategoryCrud(session)
@@ -18,7 +19,7 @@ async def list(category_id: int = 1):
     # 限制每页数量
     per_page = min(per_page, 50)
 
-    categories = await category_crud.get_public_categories()
+    categories = await category_crud.get_all_categories()
     news_list, total = await article_crud.get_articles_paginated(
         page=page,
         per_page=per_page,
@@ -39,10 +40,10 @@ async def list(category_id: int = 1):
         total_pages=total_pages
     )
 
-@bp.route('/detail/<int:article_id>')
-async def detail(article_id: int):
-    crud = ArticleCrud(g.db_session)
-    detail = await crud.get_article_detail(article_id)
+@bp.route('/<article_slug>.html')
+async def detail(article_slug: str):
+    service = ArticleService(g.db_session)
+    detail = await service.get_article_detail(article_slug)
     if detail is None:
         return await render_template('common/notfound.html'), 404
     else:

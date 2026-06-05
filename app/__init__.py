@@ -1,7 +1,7 @@
 from os import makedirs
 from quart import Quart, render_template, g
 from app.settings import settings
-from app.database import AsyncSessionLocal
+from app.database import AsyncSessionLocal, async_engine
 from app.views import user_bp, home_bp, news_bp, image_bp, auth_bp
 
 
@@ -34,6 +34,11 @@ def create_app():
                 await session.close()
 
 
+    @app.after_serving
+    async def shutdown_engine():
+        await async_engine.dispose()
+
+
     app.config["DEBUG"] = settings.DEBUG
     app.config["MAX_CONTENT_LENGTH"] = settings.MAX_CONTENT_LENGTH
     app.secret_key = settings.SECRET_KEY
@@ -43,7 +48,7 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(home_bp)
-    app.register_blueprint(news_bp, url_prefix='/news')
+    app.register_blueprint(news_bp, url_prefix='/article')
     app.register_blueprint(image_bp, url_prefix='/image')
 
     @app.errorhandler(404)

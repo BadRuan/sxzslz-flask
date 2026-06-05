@@ -19,9 +19,20 @@
                         </svg>
                     </li>
                     <li>
-                        <a href="{{ url_for('news.list', category_id=news.category.id) }}" class="hover:text-primary transition-colors">
+                        <a href="{{ url_for('article.list', category_id=news.category.id) }}" class="hover:text-primary transition-colors">
                             {{ news.category.name }}
                         </a>
+                    </li>
+                    <li>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </li>
+                    <li>
+                        <span class="hover:text-primary transition-colors">
+                            正文
+                        </span>
                     </li>
                 </ol>
             </nav>
@@ -36,7 +47,7 @@
                     </h1>
                     <div
                         class="flex items-center justify-center gap-4 text-sm text-gray-500 px-3 py-1 bg-gray-50 rounded-md inline-flex">
-                        <time datetime="2024-07-23">发布：{{ news.created | datetime('%Y-%m-%d') }}</time>
+                        <time datetime="{{ news.create_at }}">发布：{{ news.create_at | datetime('%Y年%m月%d日 %H:%M') }}</time>
                         <span class="hidden sm:inline">|</span>
                         <span>来源：{{ news.user.nickname }}</span>
                         <span class="hidden sm:inline">|</span>

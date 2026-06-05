@@ -1,21 +1,26 @@
 from asyncio import run
-from app.database import AsyncSessionLocal
+from random import choice
+from app.models import User
 from app.utils import markdown_to_html
-from app.services import ArticleService
+from app.services import ArticleService, CategoryService
+from app.database import init_db, get_async_db
+from app.crud import UserCrud
 
+async def db_begin() -> None:
+    await init_db()
 
 async def test_markdown_to_html() -> None:
     markdown: str = """![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
-    
+
     """
     html = markdown_to_html(markdown)
     print(html)
 
 async def test_create_article() ->None:
-    session = AsyncSessionLocal()
-    service = ArticleService(session)
-    markdwon:str = """## 一、出纳收支报销单
-    
+    async with get_async_db() as session:
+        service = ArticleService(session)
+        markdwon:str = """## 一、出纳收支报销单
+
 数据来源：
 1. 本期账户收入：银行本月账户明细的收入
 2. 本期账户支出：银行本月账户明细的支出
@@ -40,9 +45,31 @@ async def test_create_article() ->None:
 
 需要附**月固定资产总表**，表格来自：固定资产  ->  查询中心 -> 实时总账查询，需要注意选择需要的时间。
 """
-    
-    r = await service.create_aritcle(1, 1, '测试文章666', markdwon)
-    print(r)
+        categories = [1, 2, 3, 4]
+        users = [
+            'af75250acb04418a92ec2615828b2278',
+            'dc49a3f3719c4cfea618d192c64f6fb4',
+            '077dfda9b2a445ba933200d72040c9af'
+        ]
+        for i in range(1,1000):
+            r = await service.create_article(choice(categories), choice(users), f'测试文章{i}', markdwon)
+            print(r)
+
+async def test_add_user() -> None:
+    async with get_async_db() as session:
+        crud = UserCrud(session)
+        for i in range(1,11):
+            user = User.create_user(username=f'user_{i}', nickname=f'用户_{i}',password='admin',repeat_password='admin')
+            u = await crud.create_user(user)
+            print(u)
+
+async def test_add_category() -> None:
+    async with get_async_db() as session:
+          service = CategoryService(session)
+        #   await service.create_category('通知公告','')
+          await service.create_category('文件公示','')
+          await service.create_category('工程项目','')
+        #   await service.create_category('泵站新闻','')
 
 if __name__ == "__main__":
     run(test_create_article())

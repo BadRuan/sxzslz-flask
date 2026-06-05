@@ -9,7 +9,7 @@ class UserCrud:
         self.session = session
 
     async def get_all_users(self) -> List[User]:
-        stmt = select(User).order_by(User.created)
+        stmt = select(User).order_by(User.create_at)
         result = await self.session.execute(stmt)
         r = result.scalars().all()
         return list(r)

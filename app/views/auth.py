@@ -1,6 +1,6 @@
 from quart import Blueprint, render_template, request, redirect, url_for, session, g, flash
-from app.crud import UserCrud
-from app.utils import verify_password
+from sqlalchemy import select
+from app.models import User
 
 
 bp = Blueprint('auth', __name__)
@@ -22,13 +22,11 @@ async def login():
         return await render_template('auth/login.html')
 
     # 查询用户
-    from sqlalchemy import select
-    from app.models import User
     stmt = select(User).where(User.username == username)
     result = await g.db_session.execute(stmt)
     user = result.scalar_one_or_none()
 
-    if user is None or not verify_password(password, user.password_hash):
+    if user is None or not user.check_password(password):
         await flash('用户名或密码错误', 'error')
         return await render_template('auth/login.html')
 

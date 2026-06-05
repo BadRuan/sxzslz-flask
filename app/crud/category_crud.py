@@ -11,19 +11,11 @@ class CategoryCrud:
     async def get_all_categories(self) -> List[Category]:
         stmt = (
             select(Category)
-            .order_by(Category.id)
+            .order_by(Category.create_at)
             )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def get_public_categories(self) -> List[Category]:
-        stmt = (
-            select(Category)
-            .where(Category.is_public == True)
-            .order_by(Category.id)
-            )
-        result = await self.session.execute(stmt)
-        return list(result.scalars().all())
 
     async def create_category(self, category: Category) -> Category:
         self.session.add(category)

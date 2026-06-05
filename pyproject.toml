@@ -16,6 +16,7 @@ dependencies = [
     "rich>=15.0.0",
     "sqlalchemy>=2.0.50",
     "uvicorn>=0.48.0",
+    "argon2-cffi>=25.1.0",
 ]
 
 [[tool.uv.index]]

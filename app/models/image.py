@@ -9,7 +9,7 @@ from .base import Base
 class Image(Base):
     __tablename__: str = "images"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
     # 存储的文件名
     filename: Mapped[str] = mapped_column(String(200), nullable=False)
     # 原始文件名
@@ -18,12 +18,12 @@ class Image(Base):
     # MIME类型
     mime_type: Mapped[str] = mapped_column(String(100), nullable=False)
     upload_time: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    width: Mapped[int | None] = mapped_column(Integer)
-    height: Mapped[int | None] = mapped_column(Integer)
-    
+    width: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    height: Mapped[int | None] = mapped_column(Integer, nullable=True)
+
     def __repr__(self) -> str:
         return f"<Image {self.filename}>"
-    
+
     def to_dict(self) -> Dict:
         return {
             'id': self.id,

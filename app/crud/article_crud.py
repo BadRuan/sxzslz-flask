@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc, func
+from sqlalchemy import select, desc, func, update
 from sqlalchemy.orm import selectinload, joinedload
 from app.models import Article, Content
 
@@ -26,7 +26,7 @@ class ArticleCrud:
                 joinedload(Article.user),
                 joinedload(Article.category)
             )
-            .order_by(desc(Article.created))
+            .order_by(desc(Article.create_at))
             .limit(limit)
             )
         result = await self.session.execute(stmt)
@@ -56,7 +56,7 @@ class ArticleCrud:
                 joinedload(Article.user),
                 joinedload(Article.category)
             )
-            .order_by(desc(Article.created))
+            .order_by(desc(Article.create_at))
             .offset(offset)
             .limit(per_page)
         )
@@ -65,7 +65,7 @@ class ArticleCrud:
 
         return articles, total
 
-    async def get_user_all_articles(self, user_id: int) -> List[Article]:
+    async def get_user_all_articles(self, user_id: str) -> List[Article]:
         stmt = (
             select(Article).where(Article.user_id == user_id).options(
                 selectinload(Article.user)
@@ -74,15 +74,24 @@ class ArticleCrud:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def get_article_detail(self, article_id: int) -> Optional[Article]:
+    async def get_article_detail(self, article_slug: str) -> Optional[Article]:
         stmt = (
             select(Article)
-            .where(Article.id==article_id)
+            .where(Article.slug==article_slug)
             .options(
                 joinedload(Article.user),
                 joinedload(Article.category),
                 joinedload(Article.content)
             )
-            )
+        )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
+    
+    async def recode_view(self, article_slug: str) -> None:
+        await self.session.execute(
+            update(Article)
+            .where(Article.slug==article_slug)
+            .values(view_count = Article.view_count + 1)
+        )
+        await self.session.flush()
+        

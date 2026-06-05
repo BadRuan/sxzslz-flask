@@ -15,12 +15,12 @@
                         {% for category in categories %}
                         {% if category.id == category_id %}
                         <!-- 当前选中 -->
-                        <a href="{{ url_for('news.list', category_id=category.id) }}"
+                        <a href="{{ url_for('article.list', category_id=category.id) }}"
                             class="rounded-md bg-primary px-3 py-2 text-sm font-medium text-white">
                             {{ category.name }}
                         </a>
                         {% else %}
-                        <a href="{{ url_for('news.list', category_id=category.id) }}"
+                        <a href="{{ url_for('article.list', category_id=category.id) }}"
                             class="rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary">
                             {{ category.name }}
                         </a>
@@ -34,9 +34,13 @@
             <div class="flex-1 min-w-0">
                 <!-- 面包屑 -->
                 <div class="mb-4 text-sm text-gray-500">
-                    <a href="#" class="hover:text-primary">首页</a>
+                    <a  href="{{ url_for('home.index') }}" class="hover:text-primary">首页</a>
                     <span class="mx-2">/</span>
-                    <span class="text-gray-900">新闻中心</span>
+                    {% for category in categories %}
+                    {% if category.id == category_id %}
+                    <span class="text-gray-900">{{ category.name }}</span>
+                    {% endif %}
+                    {% endfor %}
                 </div>
 
                 <!-- 列表 -->
@@ -46,14 +50,14 @@
                         <div class="flex justify-between items-start">
                             <div class="flex-1">
                                 <h2 class="text-base font-semibold text-gray-900 hover:text-primary">
-                                    <a href="{{ url_for('news.detail', article_id=news.id) }}">{{ news.title }}</a>
+                                    <a target="_blank" href="{{ url_for('article.detail', article_slug=news.slug) }}">{{ news.title }}</a>
                                 </h2>
                                 <p class="mt-2 text-sm text-gray-600 line-clamp-2">
                                     为进一步做好汛期安全防范工作，确保泵站设备正常运行，鸠江区编办一行于今日上午莅临我站开展专项检查...
                                 </p>
                             </div>
                             <time class="ml-4 shrink-0 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">{{
-                                news.created | datetime('%Y-%m-%d') }}</time>
+                                news.create_at | datetime('%Y-%m-%d') }}</time>
                         </div>
                     </article>
                     {% endfor %}
@@ -69,14 +73,14 @@
                     </div>
                     <div class="flex flex-1 justify-between sm:justify-end gap-2">
                         {% if page > 1 %}
-                        <a href="{{ url_for('news.list', category_id=category_id, page=page-1) }}"
+                        <a href="{{ url_for('article.list', category_id=category_id, page=page-1) }}"
                             class="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">上一页</a>
                         {% else %}
                         <span class="relative inline-flex items-center rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-400 ring-1 ring-inset ring-gray-200 cursor-not-allowed">上一页</span>
                         {% endif %}
 
                         {% if page < total_pages %}
-                        <a href="{{ url_for('news.list', category_id=category_id, page=page+1) }}"
+                        <a href="{{ url_for('article.list', category_id=category_id, page=page+1) }}"
                             class="relative inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dark">下一页</a>
                         {% else %}
                         <span class="relative inline-flex items-center rounded-md bg-gray-300 px-3 py-2 text-sm font-semibold text-white cursor-not-allowed">下一页</span>
