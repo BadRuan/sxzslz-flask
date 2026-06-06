@@ -53,7 +53,7 @@
                                     <a target="_blank" href="{{ url_for('article.detail', article_slug=news.slug) }}">{{ news.title }}</a>
                                 </h2>
                                 <p class="mt-2 text-sm text-gray-600 line-clamp-2">
-                                    为进一步做好汛期安全防范工作，确保泵站设备正常运行，鸠江区编办一行于今日上午莅临我站开展专项检查...
+                                   {{ news.summary }} 
                                 </p>
                             </div>
                             <time class="ml-4 shrink-0 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">{{

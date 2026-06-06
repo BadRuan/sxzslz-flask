@@ -11,16 +11,19 @@ class ArticleService:
         self.crud = ArticleCrud(session)
 
     async def create_article(self,
-                             category_id: int,
-                             user_id: str,
-                             title: str,
-                             content: str
+                            category_id: int,
+                            user_id: str,
+                            title: str,
+                            summary: str,
+                            image_id: int,
+                            content: str
                         ) -> Article:
         article = Article(
             title=title,
+            summary=summary,
             category_id=category_id,
             user_id=user_id,
-            is_public=True
+            image_id=image_id
         )
         html = markdown_to_html(content)
         c = Content(markdown=content, html=html)

@@ -10,6 +10,7 @@ from .base import Base
 if TYPE_CHECKING:
     from .user import User
     from .category import Category
+    from .image import Image
 
 
 def generate_slug() -> str:
@@ -20,22 +21,41 @@ def generate_slug() -> str:
 class Article(Base):
     __tablename__: str = "articles"
 
+    # 编号
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    # 唯一url
     slug: Mapped[str] = mapped_column(String(255), unique=True, default=generate_slug)
+    # 标题
     title: Mapped[str] = mapped_column(String(200), nullable=False)
+    # 摘要
+    summary: Mapped[str] = mapped_column(String(500), nullable=True)
+    # 分类id
     category_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("categories.id", ondelete="CASCADE"),
         nullable=False
     )
+    # 作者id
     user_id: Mapped[str] = mapped_column(
         String(32),
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False
     )
+    # 封面图url
+    image_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("images.id"),
+        nullable=True
+    )
+    # 发布时间
     create_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
+    # 更新时间
     update_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
+    # 是否公开
     is_public: Mapped[bool] = mapped_column(Boolean, default=True)
+    # 是否推荐
+    is_recommended: Mapped[bool] = mapped_column(Boolean, default=False)
+    # 阅读量
     view_count: Mapped[int] = mapped_column(Integer, default=0)
 
     # 关系映射
@@ -44,12 +64,19 @@ class Article(Base):
         back_populates="articles"
     )
     category: Mapped[Category] = relationship("Category", back_populates="articles")
-
+    # 内容
     content: Mapped[Content] = relationship(
         "Content",
         back_populates="article",
         uselist=False,
         cascade="all, delete-orphan",
+        lazy="select"
+    )
+    # 图片
+    image: Mapped[Image] = relationship(
+        "Image",
+        back_populates="articles",
+        uselist=False,
         lazy="select"
     )
 

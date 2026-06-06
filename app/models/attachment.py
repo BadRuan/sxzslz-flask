@@ -1,14 +1,14 @@
-from typing import Dict, List
+from typing import Dict
 from datetime import datetime
 from sqlalchemy import Integer, String, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from .base import Base
-from .article import Article
 
 
-class Image(Base):
-    __tablename__: str = "images"
+
+class Attachment(Base):
+    __tablename__: str = "attachments"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
     # 存储的文件名
@@ -16,20 +16,10 @@ class Image(Base):
     # 原始文件名
     original_filename: Mapped[str] = mapped_column(String(200), nullable=False)
     file_size: Mapped[int] = mapped_column(Integer, nullable=False)
-    # MIME类型
-    mime_type: Mapped[str] = mapped_column(String(100), nullable=False)
     upload_time: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
-    width: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    height: Mapped[int | None] = mapped_column(Integer, nullable=True)
-
-    articles: Mapped[List[Article]] = relationship(
-        "Article",
-        back_populates="image",
-        lazy="selectin"
-    )
 
     def __repr__(self) -> str:
-        return f"<Image {self.filename}>"
+        return f"<Attachment {self.filename}>"
 
     def to_dict(self) -> Dict:
         return {
@@ -37,10 +27,7 @@ class Image(Base):
             'filename': self.filename,
             'original_filename': self.original_filename,
             'file_size': self.file_size,
-            'mime_type': self.mime_type,
             'upload_time': self.upload_time,
-            'width': self.width,
-            'height': self.height,
-            'url': f'/images/{self.filename}'
+            'url': f'/attachment/{self.filename}'
         }
         

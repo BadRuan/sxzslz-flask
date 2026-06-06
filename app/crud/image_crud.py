@@ -8,14 +8,7 @@ class ImageCrud:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def get_image_by_id(self, id: int) -> Optional[Image]:
-        result = await self.session.execute(
-            select(Image)
-            .where(Image.id == id)
-        )
-        return result.scalar_one_or_none()
-    
-    async def get_image_by_filename(self, filename: str) -> Optional[Image]:
+    async def get_by_filename(self, filename: str) -> Optional[Image]:
         result = await self.session.execute(
             select(Image)
             .where(Image.filename == filename)

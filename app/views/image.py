@@ -44,7 +44,7 @@ async def upload_image():
     
     # 生成唯一文件名
     filename = generate_unique_filename(original_filename)
-    file_path = path.join(settings.UPLOAD_FOLDER, filename) 
+    file_path = path.join(settings.IMAGE_UPLOAD_FOLDER, filename) 
     
     # 获取文件信息
     file.seek(0, SEEK_END)
@@ -83,12 +83,12 @@ async def upload_image():
     }), 201
 
 
-@bp.route('/<int:id>', methods=['GET'])
-async def get_image_info(id: int):
+@bp.route('/<filename>/info', methods=['GET'])
+async def get_image_info(filename: str):
     """获取图片信息"""
     session = g.db_session
     crud = ImageCrud(session)
-    image = await crud.get_image_by_id(id)
+    image = await crud.get_by_filename(filename)
     if image is None:
         return await render_template('common/notfound.html'), 404
     else:
@@ -97,56 +97,4 @@ async def get_image_info(id: int):
 @bp.route('/<filename>')
 async def serve_image(filename: str):
     """提供图片访问"""
-    return await send_from_directory(settings.UPLOAD_FOLDER, filename)
-
-# @app.route('/images', methods=['GET'])
-# async def list_images():
-#     """图片列表"""
-#     page = request.args.get('page', 1, type=int)
-#     per_page = request.args.get('per_page', 20, type=int)
-    
-#     pagination = Image.query.order_by(Image.upload_time.desc()).paginate(
-#         page=page, per_page=per_page
-#     )
-    
-#     return jsonify({
-#         'total': pagination.total,
-#         'pages': pagination.pages,
-#         'current_page': page,
-#         'images': [img.to_dict() for img in pagination.items]
-#     })
-
-
-# @app.route('/images/<int:image_id>/resize')
-# def resize_image(image_id):
-#     """动态缩放图片"""
-#     width = request.args.get('width', type=int)
-#     height = request.args.get('height', type=int)
-    
-#     if not width and not height:
-#         return jsonify({'error': '需要指定width或height'}), 400
-    
-#     image = Image.query.get_or_404(image_id)
-#     file_path = path.join(app.config['UPLOAD_FOLDER'], image.filename)
-    
-#     img = PILImage.open(file_path)
-    
-#     # 计算缩放尺寸
-#     if width and height:
-#         new_size = (width, height)
-#     elif width:
-#         ratio = width / img.width
-#         new_size = (width, int(img.height * ratio))
-#     else:
-#         ratio = height / img.height
-#         new_size = (int(img.width * ratio), height)
-    
-#     img = img.resize(new_size, PILImage.Resampling.LANCZOS)
-    
-#     # 返回缩放后的图片
-#     from io import BytesIO
-#     img_io = BytesIO()
-#     img.save(img_io, img.format or 'JPEG')
-#     img_io.seek(0)
-    
-#     return app.response_class(img_io, mimetype=image.mime_type)
+    return await send_from_directory(settings.IMAGE_UPLOAD_FOLDER, filename)

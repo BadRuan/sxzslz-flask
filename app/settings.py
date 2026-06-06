@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     DB_ECHO: bool = False
     DEBUG: bool = False
     SECRET_KEY: str = "your-secret-key-change-in-production"
-    UPLOAD_FOLDER: str = path.join(getcwd(), 'uploads')
+    IMAGE_UPLOAD_FOLDER: str = path.join(getcwd(), 'uploads/image')
+    ATTACHMENT_UPLOAD_FOLDER: str = path.join(getcwd(), 'uploads/attachment')
     MAX_CONTENT_LENGTH: int = 16 * 1024 * 1024 # 最大16MB
     ALLOWED_EXTENSIONS: Set[str] = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
     
