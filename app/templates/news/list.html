@@ -1,16 +1,15 @@
 {% extends "common/base.html" %}
 
-{% block title %}新闻列表{% endblock %}
+{% block title %}文章列表{% endblock %}
 
 {% block content %}
 <main class="py-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col gap-8 lg:flex-row">
 
-            <!-- ========== 左侧：新闻分类 ========== -->
             <aside class="lg:w-64 shrink-0">
                 <div class="rounded-lg bg-white p-4 shadow-xs ring-1 ring-border">
-                    <h3 class="text-sm font-semibold text-gray-900 mb-3">新闻分类</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 mb-3">文章分类</h3>
                     <nav class="flex flex-col space-y-1">
                         {% for category in categories %}
                         {% if category.id == category_id %}
@@ -29,8 +28,7 @@
                     </nav>
                 </div>
             </aside>
-
-            <!-- ========== 右侧：新闻列表 ========== -->
+            
             <div class="flex-1 min-w-0">
                 <!-- 面包屑 -->
                 <div class="mb-4 text-sm text-gray-500">

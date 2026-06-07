@@ -47,7 +47,7 @@ def create_app():
     makedirs(settings.IMAGE_UPLOAD_FOLDER, exist_ok=True)
     makedirs(settings.ATTACHMENT_UPLOAD_FOLDER, exist_ok=True)
     
-    # app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(home_bp)
     app.register_blueprint(news_bp, url_prefix='/article')

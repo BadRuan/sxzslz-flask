@@ -10,7 +10,7 @@ bp = Blueprint('auth', __name__)
 async def login():
     """登录页面"""
     if request.method == 'GET':
-        return await render_template('auth/login.html')
+        return await render_template('admin/login.html')
 
     # POST 处理登录
     form = await request.form
@@ -19,7 +19,7 @@ async def login():
 
     if not username or not password:
         await flash('用户名和密码不能为空', 'error')
-        return await render_template('auth/login.html')
+        return await render_template('admin/login.html')
 
     # 查询用户
     stmt = select(User).where(User.username == username)
@@ -28,7 +28,7 @@ async def login():
 
     if user is None or not user.check_password(password):
         await flash('用户名或密码错误', 'error')
-        return await render_template('auth/login.html')
+        return await render_template('admin/login.html')
 
     # 登录成功，设置 session
     session['user_id'] = user.id
@@ -36,6 +36,14 @@ async def login():
     session['nickname'] = user.nickname
 
     return redirect(url_for('home.index'))
+
+@bp.route('/dashboard')
+async def dashboard():
+    return await render_template('admin/dashboard.html')
+
+@bp.route('/admin/edit')
+async def article_edit():
+    return await render_template('admin/article_edit.html')
 
 
 @bp.route('/logout')
