@@ -1,5 +1,5 @@
 from quart import Blueprint, render_template, g
-from app.crud import ArticleCrud
+from app.services import ArticleService
 
 
 bp = Blueprint('home', __name__)
@@ -7,6 +7,7 @@ bp = Blueprint('home', __name__)
 @bp.route('/')
 @bp.route('/index.html')
 async def index():
-    crud = ArticleCrud(g.db_session)
+    crud = ArticleService(g.db_session)
     articles = await crud.get_latest_article(5)
-    return await render_template('home.html', articles=articles)
+    recommented = await crud.get_recommended_article(5)
+    return await render_template('home.html', articles=articles, recommented=recommented)

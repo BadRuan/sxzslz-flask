@@ -23,44 +23,21 @@
                     <div id="carousel" class="relative group">
                         <!-- 幻灯片 -->
                         <div class="relative aspect-[16/9] overflow-hidden">
-                            <!-- Slide 1 -->
+                            
+                            {% for article in recommented %}
                             <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100"
                                 data-slide="0">
-                                <a href="#" class="block h-full">
-                                    <img src="./static/pic/banner.jpg" class="w-full h-full object-cover" />
+                                <a target="_blank" href="{{ url_for('article.detail', article_slug=article.slug) }}" class="block h-full">
+                                    <img src="{{ url_for('image.serve_image', filename=article.image.filename) }}" class="w-full h-full object-cover" />
                                     <div
                                         class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5">
-                                        <h3 class="text-white text-lg font-semibold">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</h3>
-                                        <p class="text-gray-300 text-sm mt-1">2025‑07‑23</p>
+                                        <h3 class="text-white text-lg font-semibold">{{ article.title }}</h3>
+                                        <p class="text-gray-300 text-sm mt-1">{{ article.create_at | datetime('%Y-%m-%d') }}</p>
                                     </div>
                                 </a>
                             </div>
+                            {% endfor %}
 
-                            <!-- Slide 2 -->
-                            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0"
-                                data-slide="1">
-                                <a href="#" class="block h-full">
-                                    <img src="static/pic/banner.jpg" class="w-full h-full object-cover" />
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5">
-                                        <h3 class="text-white text-lg font-semibold">水利工程标准化管理暨安全生产工作会议召开</h3>
-                                        <p class="text-gray-300 text-sm mt-1">2025‑07‑21</p>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <!-- Slide 3 -->
-                            <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0"
-                                data-slide="2">
-                                <a href="#" class="block h-full">
-                                    <img src="static/pic/banner.jpg" class="w-full h-full object-cover" />
-                                    <div
-                                        class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-5">
-                                        <h3 class="text-white text-lg font-semibold">冬季检修全面启动 保障泵站安全运行</h3>
-                                        <p class="text-gray-300 text-sm mt-1">2025‑07‑19</p>
-                                    </div>
-                                </a>
-                            </div>
                         </div>
 
                         <!-- 左箭头 -->

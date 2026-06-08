@@ -1,6 +1,6 @@
 {% extends "common/base.html" %}
 
-{% block title %}新闻详情{% endblock %}
+{% block title %} {{ news.title }} {% endblock %}
 
 {% block content %}
 <main class="bg-[var(--color-background)]">
@@ -66,61 +66,6 @@
                         prose-a:text-primary prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-primary/80
                         ">
                     {{ news.content.html | safe }}
-                </div>
-
-                <div class="not-prose px-6 sm:px-10 pb-10">
-                    <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center">
-                        <span class="w-1 h-5 bg-[var(--color-primary)] rounded-full mr-2"></span>
-                        附件下载
-                    </h3>
-                    <div class="grid gap-3 sm:grid-cols-2">
-                        <a href="#"
-                            class="group flex items-center justify-between rounded-lg border border-[var(--color-border)] px-4 py-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary-light)] transition-all duration-200">
-                            <div class="flex items-center min-w-0">
-                                <div
-                                    class="flex-shrink-0 w-8 h-8 rounded bg-red-50 text-[var(--color-primary)] flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 Section 0 002 2z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <div class="min-w-0">
-                                    <span
-                                        class="block text-sm font-medium text-gray-900 truncate group-hover:text-[var(--color-primary)]">防汛检查工作方案.pdf</span>
-                                    <span class="block text-xs text-gray-500">2.3 MB</span>
-                                </div>
-                            </div>
-                            <svg class="w-5 h-5 text-gray-400 group-hover:text-[var(--color-primary)] transition-colors"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                        </a>
-                        <a href="#"
-                            class="group flex items-center justify-between rounded-lg border border-[var(--color-border)] px-4 py-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-primary-light)] transition-all duration-200">
-                            <div class="flex items-center min-w-0">
-                                <div
-                                    class="flex-shrink-0 w-8 h-8 rounded bg-green-50 text-green-600 flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                        </path>
-                                    </svg>
-                                </div>
-                                <div class="min-w-0">
-                                    <span
-                                        class="block text-sm font-medium text-gray-900 truncate group-hover:text-[var(--color-primary)]">设备巡检记录表.xlsx</span>
-                                    <span class="block text-xs text-gray-500">1.1 MB</span>
-                                </div>
-                            </div>
-                            <svg class="w-5 h-5 text-gray-400 group-hover:text-[var(--color-primary)] transition-colors"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                        </a>
-                    </div>
                 </div>
             </article>
         </div>

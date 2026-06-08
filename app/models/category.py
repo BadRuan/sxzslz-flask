@@ -15,7 +15,6 @@ class Category(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-    description: Mapped[str] = mapped_column(Text, nullable=True)
     create_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     articles: Mapped[List[Article]] = relationship("Article", back_populates="category")
@@ -27,6 +26,5 @@ class Category(Base):
         return {
             "id": self.id,
             "name": self.name,
-            "description": self.description,
             "create_at": self.create_at
         }

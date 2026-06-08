@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from app.models import Attachment
 
 
@@ -19,3 +19,8 @@ class AttachmentCrud:
         self.session.add(attachment)
         await self.session.flush()
         return attachment
+    
+    async def get_counts(self) -> int:
+        return await self.session.scalar(
+            func.count(Attachment.id)
+        )

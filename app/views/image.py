@@ -6,7 +6,7 @@ from PIL import Image as PILImage
 from quart import Blueprint, request, render_template, g, jsonify, send_from_directory
 from app.settings import settings
 from app.models import Image
-from app.crud import ImageCrud
+from app.services import ImageService
 
 
 bp = Blueprint('image', __name__)
@@ -25,8 +25,7 @@ def generate_unique_filename(filename):
 @bp.route('/upload', methods=['POST'])
 async def upload_image():
     """图片上传接口"""
-    session = g.db_session
-    crud = ImageCrud(session)
+    service = ImageService(g.db_session)
     files = await request.files
     if 'file' not in files: 
         return jsonify({'error': '没有文件'}), 400
@@ -75,7 +74,7 @@ async def upload_image():
         width=width,
         height=height
     )
-    await crud.save_image(image)
+    await service.save_image(image)
     
     return jsonify({
         'status': 'success',
@@ -87,8 +86,8 @@ async def upload_image():
 async def get_image_info(filename: str):
     """获取图片信息"""
     session = g.db_session
-    crud = ImageCrud(session)
-    image = await crud.get_by_filename(filename)
+    service = ImageService(session)
+    image = await service.get_by_filename(filename)
     if image is None:
         return await render_template('common/notfound.html'), 404
     else:

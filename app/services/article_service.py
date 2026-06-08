@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils import markdown_to_html
 from app.models import Article, Content
@@ -35,3 +35,24 @@ class ArticleService:
         if detail is not None:
             await self.crud.recode_view(article_slug)
         return detail
+    
+    async def get_articles_paginated(self, category_id: int, page: int, per_page: int) -> Tuple[List[Article], int]:
+        # 限制每页数量
+        per_page = min(per_page, 50)
+        article_list, total = await self.crud.get_articles_paginated(
+        page=page,
+        per_page=per_page,
+        category_id=category_id)
+        return article_list, total
+    
+    async def get_latest_article(self, limit: int) -> List[Article]:
+        return await self.crud.get_all_latest_article(limit)
+    
+    async def get_user_latest_article(self, user_id: str, limit: int) -> List[Article]:
+        return await self.crud.get_user_latest_article(user_id, limit)
+
+    async def get_recommended_article(self, limit: int) -> List[Article]:
+        return await self.crud.get_recommended_article(limit)
+
+    async def get_counts(self) -> int:
+        return await self.crud.get_counts()
