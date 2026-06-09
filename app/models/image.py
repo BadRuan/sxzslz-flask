@@ -1,10 +1,9 @@
 from typing import Dict, List
 from datetime import datetime
-from sqlalchemy import Integer, String, DateTime
+from sqlalchemy import Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
-from .base import Base
-from .article import Article
+from app.models import Base, User, Article
 
 
 class Image(Base):
@@ -18,9 +17,23 @@ class Image(Base):
     file_size: Mapped[int] = mapped_column(Integer, nullable=False)
     # MIME类型
     mime_type: Mapped[str] = mapped_column(String(100), nullable=False)
+    # 上传用户
+    user_id: Mapped[str] = mapped_column(
+        String(32),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
     upload_time: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     width: Mapped[int | None] = mapped_column(Integer, nullable=True)
     height: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # 浏览次数
+    view_count: Mapped[int] = mapped_column(Integer, default=0)
+    
+    user: Mapped[User] = relationship(
+        "User",
+        back_populates="images",
+        lazy="selectin"
+    )
 
     articles: Mapped[List[Article]] = relationship(
         "Article",
@@ -41,6 +54,7 @@ class Image(Base):
             'upload_time': self.upload_time,
             'width': self.width,
             'height': self.height,
-            'url': f'/images/{self.filename}'
+            'url': f'/image/{self.filename}',
+            'view_count': self.view_count
         }
         

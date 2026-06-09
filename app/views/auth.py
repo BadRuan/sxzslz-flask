@@ -1,6 +1,8 @@
 from quart import Blueprint, render_template, request, redirect, url_for, session, g, flash
 from sqlalchemy import select
 from app.models import User
+from app.services import ArticleService, ImageService, AttachmentService
+from app.crud import UserCrud
 
 
 bp = Blueprint('auth', __name__)
@@ -39,11 +41,28 @@ async def login():
 
 @bp.route('/dashboard')
 async def dashboard():
-    return await render_template('admin/dashboard.html')
+    db_session = g.db_session
+    article_service = ArticleService(db_session)
+    image_service = ImageService(db_session)
+    attachment_service = AttachmentService(db_session)
+    user_crud = UserCrud(db_session)
 
-@bp.route('/admin/edit')
-async def article_edit():
-    return await render_template('admin/article_edit.html')
+    article_count = await article_service.get_counts()
+    monthly_count = await article_service.get_monthly_count()
+    image_count = await image_service.get_counts()
+    attachment_count = await attachment_service.get_counts()
+    user_count = await user_crud.get_count()
+    recent_articles = await article_service.get_latest(10)
+
+    return await render_template(
+        'admin/dashboard.html',
+        article_count=article_count,
+        monthly_count=monthly_count,
+        image_count=image_count,
+        attachment_count=attachment_count,
+        user_count=user_count,
+        recent_articles=recent_articles
+    )
 
 
 @bp.route('/logout')

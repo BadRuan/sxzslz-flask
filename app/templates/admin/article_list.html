@@ -1,0 +1,123 @@
+{% extends "admin/components/base.html" %}
+
+{% block title %}文章管理{% endblock %}
+
+{% block content %}
+<div class="flex h-screen overflow-hidden">
+    {% include 'admin/components/sidebar.html' %}
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        {% include 'admin/components/header.html' %}
+
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-900">文章管理</h2>
+                <a href="{{ url_for('admin.create_form') }}"
+                    class="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:opacity-90">
+                    + 新增文章
+                </a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="mb-4 rounded-md px-4 py-3 text-sm
+                {% if category == 'error' %}bg-red-50 text-red-600{% else %}bg-green-50 text-green-600{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="bg-white rounded-lg shadow-xs ring-1 ring-border">
+                <table class="w-full text-sm text-left">
+                    <thead class="border-b border-border text-gray-500">
+                        <tr class="text-center">
+                            <th class="px-5 py-3 font-medium">标题</th>
+                            <th class="px-5 py-3 font-medium">分类</th>
+                            <th class="px-5 py-3 font-medium">作者</th>
+                            <th class="px-5 py-3 font-medium">状态</th>
+                            <th class="px-5 py-3 font-medium">推荐</th>
+                            <th class="px-5 py-3 font-medium">浏览量</th>
+                            <th class="px-5 py-3 font-medium">发布时间</th>
+                            <th class="px-5 py-3 font-medium">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                        {% for article in articles %}
+                        <tr class="hover:bg-gray-50 text-center">
+                            <td class="px-5 py-3 text-gray-900 font-medium max-w-xs truncate">
+                                {{ article.title }}
+                            </td>
+                            <td class="px-5 py-3 text-gray-600">
+                                {{ article.category.name }}
+                            </td>
+                            <td class="px-5 py-3 text-gray-600">
+                                {{ article.user.nickname if article.user else '-' }}
+                            </td>
+                            <td class="px-5 py-3">
+                                <form method="POST" action="{{ url_for('admin.toggle_public', article_id=article.id) }}" class="inline">
+                                    <button type="submit"
+                                        class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium cursor-pointer transition-colors
+                                        {% if article.is_public %}bg-green-50 text-green-600 hover:bg-green-100{% else %}bg-gray-100 text-gray-500 hover:bg-gray-200{% endif %}">
+                                        {% if article.is_public %}公开{% else %}隐藏{% endif %}
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="px-5 py-3">
+                                <form method="POST" action="{{ url_for('admin.toggle_recommended', article_id=article.id) }}" class="inline">
+                                    <button type="submit"
+                                        class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium cursor-pointer transition-colors
+                                        {% if article.is_recommended %}bg-yellow-50 text-yellow-600 hover:bg-yellow-100{% else %}bg-gray-100 text-gray-400 hover:bg-gray-200{% endif %}">
+                                        {% if article.is_recommended %}★ 推荐{% else %}☆ 未推荐{% endif %}
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="px-5 py-3 text-gray-600">{{ article.view_count }}</td>
+                            <td class="px-5 py-3 text-gray-500">{{ article.create_at | datetime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td class="px-5 py-3">
+                                <a href="{{ url_for('admin.edit_form', article_id=article.id) }}"
+                                    class="text-xs text-primary hover:underline">编辑</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="px-5 py-10 text-center text-gray-400">暂无文章</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if total_pages > 1 %}
+                <div class="flex items-center justify-between border-t border-border px-5 py-3">
+                    <div class="text-sm text-gray-500">共 {{ total }} 篇文章</div>
+                    <div class="flex items-center gap-1">
+                        {% if page > 1 %}
+                        <a href="?page={{ page - 1 }}"
+                            class="rounded-md border border-border px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">上一页</a>
+                        {% endif %}
+
+                        {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                        <span class="rounded-md bg-primary px-3 py-1.5 text-sm text-white">{{ p }}</span>
+                        {% elif p <= 3 or p > total_pages - 2 or (p >= page - 1 and p <= page + 1) %}
+                        <a href="?page={{ p }}"
+                            class="rounded-md border border-border px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">{{ p }}</a>
+                        {% elif p == 4 or p == total_pages - 2 %}
+                        <span class="px-1 text-gray-400">...</span>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page < total_pages %}
+                        <a href="?page={{ page + 1 }}"
+                            class="rounded-md border border-border px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">下一页</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

@@ -4,6 +4,7 @@ from app.services import ArticleService, CategoryService
 
 bp = Blueprint('article', __name__)
 
+
 @bp.route('/list/index.html')
 @bp.route('/list/<int:category_id>.html')
 async def list(category_id: int = 1):
@@ -15,8 +16,8 @@ async def list(category_id: int = 1):
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
 
-    categories = await category_service.get_all_categories()
-    news_list, total = await article_service.get_articles_paginated(
+    categories = await category_service.get_all()
+    news_list, total = await article_service.get_paginated(
         page=page,
         per_page=per_page,
         category_id=category_id
@@ -36,10 +37,11 @@ async def list(category_id: int = 1):
         total_pages=total_pages
     )
 
+
 @bp.route('/<article_slug>.html')
 async def detail(article_slug: str):
     service = ArticleService(g.db_session)
-    detail = await service.get_article_detail(article_slug)
+    detail = await service.get_detail(article_slug)
     if detail is None:
         return await render_template('common/notfound.html'), 404
     else:

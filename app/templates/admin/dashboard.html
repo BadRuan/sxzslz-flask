@@ -6,68 +6,52 @@
 <div class="flex h-screen overflow-hidden">
     {% include 'admin/components/sidebar.html' %}
 
-            <div class="flex-1 flex flex-col overflow-hidden">
-            {% include 'admin/components/header.html' %}
+    <div class="flex-1 flex flex-col overflow-hidden">
+        {% include 'admin/components/header.html' %}
 
-            <!-- 主内容 -->
-            <main class="flex-1 overflow-y-auto p-6 space-y-6">
-                <!-- 统计卡片 -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                    <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
-                        <div class="text-sm text-gray-500">文章总数</div>
-                        <div class="text-2xl font-bold text-gray-900 mt-1">128</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
-                        <div class="text-sm text-gray-500">本月发布</div>
-                        <div class="text-2xl font-bold text-gray-900 mt-1">12</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
-                        <div class="text-sm text-gray-500">图片数量</div>
-                        <div class="text-2xl font-bold text-gray-900 mt-1">5126</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
-                        <div class="text-sm text-gray-500">附件数量</div>
-                        <div class="text-2xl font-bold text-gray-900 mt-1">56</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
-                        <div class="text-sm text-gray-500">系统用户</div>
-                        <div class="text-2xl font-bold text-gray-900 mt-1">8</div>
-                    </div>
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6 space-y-6">
+            <!-- 统计卡片 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
+                    <div class="text-sm text-gray-500">文章总数</div>
+                    <div class="text-2xl font-bold text-gray-900 mt-1">{{ article_count }}</div>
                 </div>
-
-                <!-- 最近新闻 -->
-                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border">
-                    <div class="px-5 py-4 border-b border-border">
-                        <h3 class="text-sm font-semibold text-gray-900">最近新闻</h3>
-                    </div>
-                    <ul class="divide-y divide-border">
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">鸠江区编办莅临沈巷镇水利站开展防汛检查工作</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">水利工程标准化管理暨安全生产工作会议召开</li>
-                        <li class="px-5 py-3 text-sm text-gray-700">冬季检修全面启动 保障泵站安全运行</li>
-                    </ul>
+                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
+                    <div class="text-sm text-gray-500">本月发布</div>
+                    <div class="text-2xl font-bold text-gray-900 mt-1">{{ monthly_count }}</div>
                 </div>
-            </main>
-        </div>
+                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
+                    <div class="text-sm text-gray-500">图片数量</div>
+                    <div class="text-2xl font-bold text-gray-900 mt-1">{{ image_count }}</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
+                    <div class="text-sm text-gray-500">附件数量</div>
+                    <div class="text-2xl font-bold text-gray-900 mt-1">{{ attachment_count }}</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5">
+                    <div class="text-sm text-gray-500">系统用户</div>
+                    <div class="text-2xl font-bold text-gray-900 mt-1">{{ user_count }}</div>
+                </div>
+            </div>
 
+            <!-- 最近新闻 -->
+            <div class="bg-white rounded-lg shadow-xs ring-1 ring-border">
+                <div class="px-5 py-4 border-b border-border">
+                    <h3 class="text-sm font-semibold text-gray-900">最近文章</h3>
+                </div>
+                <ul class="divide-y divide-border">
+                    {% for article in recent_articles %}
+                    <li class="px-5 py-3 flex items-center justify-between">
+                        <span class="text-sm text-gray-700">{{ article.title }}</span>
+                        <span class="text-xs text-gray-400">{{ article.create_at | datetime }}</span>
+                    </li>
+                    {% else %}
+                    <li class="px-5 py-8 text-center text-sm text-gray-400">暂无文章</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </main>
+    </div>
 </div>
 {% endblock %}

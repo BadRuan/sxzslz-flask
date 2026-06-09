@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User
 
@@ -11,8 +11,8 @@ class UserCrud:
     async def get_all_users(self) -> List[User]:
         stmt = select(User).order_by(User.create_at)
         result = await self.session.execute(stmt)
-        r = result.scalars().all()
-        return list(r)
+        users = result.scalars().all()
+        return list(users)
 
     async def get_user_by_username(self, username: str) -> Optional[User]:
         stmt = select(User).where(User.username == username)
@@ -23,3 +23,8 @@ class UserCrud:
         self.session.add(user)
         await self.session.flush()
         return user
+
+    async def get_count(self) -> int:
+        return (await self.session.scalar(
+            func.count(User.id)
+        )) or 0

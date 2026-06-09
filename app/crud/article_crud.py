@@ -1,16 +1,17 @@
 from typing import List, Optional, Tuple
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func, update
 from sqlalchemy.orm import joinedload
 from app.models import Article, Content
+from app.utils import markdown_to_html
 
 
 class ArticleCrud:
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    # 创建文章
-    async def create_article(self, article: Article, content: Content) -> Article:
+    async def create(self, article: Article, content: Content) -> Article:
         self.session.add(article)
         await self.session.flush()
         content.id = article.id
@@ -19,8 +20,8 @@ class ArticleCrud:
         await self.session.refresh(article)
         return article
 
-    # 获取指定数量最新文章
-    async def get_all_latest_article(self, limit: int) -> List[Article]:
+    async def get_latest(self, limit: int) -> List[Article]:
+        """获取最新公开文章"""
         stmt = (
             select(Article)
             .where(Article.is_public == True)
@@ -30,12 +31,12 @@ class ArticleCrud:
             )
             .order_by(desc(Article.create_at))
             .limit(limit)
-            )
+        )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
-    
-    # 获取指定用户的指定数量的最新文章
-    async def get_user_latest_article(self, user_id: str, limit: int) -> List[Article]:
+
+    async def get_user_latest(self, user_id: str, limit: int) -> List[Article]:
+        """获取指定用户的最新公开文章"""
         stmt = (
             select(Article)
             .where(Article.is_public == True, Article.user_id == user_id)
@@ -45,27 +46,24 @@ class ArticleCrud:
             )
             .order_by(desc(Article.create_at))
             .limit(limit)
-            )
+        )
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def get_articles_paginated(
+    async def get_paginated(
         self,
         page: int = 1,
         per_page: int = 10,
         category_id: Optional[int] = None
     ) -> Tuple[List[Article], int]:
-        """分页查询文章，返回 (文章列表, 总数)"""
-        # 基础查询条件
+        """分页查询公开文章"""
         base_query = select(Article).where(Article.is_public == True)
         if category_id is not None:
             base_query = base_query.where(Article.category_id == category_id)
 
-        # 查询总数
         count_stmt = select(func.count()).select_from(base_query.subquery())
         total = (await self.session.execute(count_stmt)).scalar() or 0
 
-        # 分页查询
         offset = (page - 1) * per_page
         stmt = (
             base_query
@@ -79,27 +77,23 @@ class ArticleCrud:
         )
         result = await self.session.execute(stmt)
         articles = list(result.scalars().all())
-
         return articles, total
 
-    async def get_user_articles_paginated(
+    async def get_user_paginated(
         self,
         user_id: str,
         page: int = 1,
         per_page: int = 10,
         category_id: Optional[int] = None
     ) -> Tuple[List[Article], int]:
-        """分页查询文章，返回 (文章列表, 总数)"""
-        # 基础查询条件
+        """分页查询指定用户的公开文章"""
         base_query = select(Article).where(Article.is_public == True, Article.user_id == user_id)
         if category_id is not None:
             base_query = base_query.where(Article.category_id == category_id)
 
-        # 查询总数
         count_stmt = select(func.count()).select_from(base_query.subquery())
         total = (await self.session.execute(count_stmt)).scalar() or 0
 
-        # 分页查询
         offset = (page - 1) * per_page
         stmt = (
             base_query
@@ -113,10 +107,34 @@ class ArticleCrud:
         )
         result = await self.session.execute(stmt)
         articles = list(result.scalars().all())
-
         return articles, total
 
-    async def get_recommended_article(self, limit: int) -> List[Article]:
+    async def get_admin_paginated(
+        self,
+        page: int = 1,
+        per_page: int = 10
+    ) -> Tuple[List[Article], int]:
+        """后台分页查询所有文章（含草稿）"""
+        base_query = select(Article)
+        count_stmt = select(func.count()).select_from(base_query.subquery())
+        total = (await self.session.execute(count_stmt)).scalar() or 0
+        offset = (page - 1) * per_page
+        stmt = (
+            base_query
+            .options(
+                joinedload(Article.user),
+                joinedload(Article.category)
+            )
+            .order_by(desc(Article.create_at))
+            .offset(offset)
+            .limit(per_page)
+        )
+        result = await self.session.execute(stmt)
+        articles = list(result.scalars().all())
+        return articles, total
+
+    async def get_recommended(self, limit: int) -> List[Article]:
+        """获取推荐文章"""
         stmt = (
             select(Article)
             .where(Article.is_recommended == True)
@@ -129,10 +147,38 @@ class ArticleCrud:
         result = await self.session.execute(stmt)
         return list(result.scalars().all())
 
-    async def get_article_detail(self, article_slug: str) -> Optional[Article]:
+    async def get_by_id(self, article_id: int) -> Optional[Article]:
+        """根据 ID 获取文章（含内容）"""
         stmt = (
             select(Article)
-            .where(Article.slug==article_slug)
+            .where(Article.id == article_id)
+            .options(
+                joinedload(Article.content)
+            )
+        )
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
+    async def update(self, article_id: int, title: str, category_id: int,
+                     content: str, is_public: bool, image_id: Optional[int] = None) -> None:
+        """更新文章"""
+        article = await self.session.get(Article, article_id)
+        if article:
+            article.title = title
+            article.category_id = category_id
+            article.is_public = is_public
+            if image_id is not None:
+                article.image_id = image_id
+            if article.content:
+                article.content.markdown = content
+                article.content.html = markdown_to_html(content)
+            await self.session.flush()
+
+    async def get_article_by_slug(self, article_slug: str) -> Optional[Article]:
+        """根据 slug 获取文章详情"""
+        stmt = (
+            select(Article)
+            .where(Article.slug == article_slug)
             .options(
                 joinedload(Article.user),
                 joinedload(Article.category),
@@ -141,17 +187,46 @@ class ArticleCrud:
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
-    
-    # 阅读量 +1 
-    async def recode_view(self, article_slug: str) -> None:
+
+    async def record_view(self, article_slug: str) -> None:
+        """阅读量 +1"""
         await self.session.execute(
             update(Article)
-            .where(Article.slug==article_slug)
-            .values(view_count = Article.view_count + 1)
+            .where(Article.slug == article_slug)
+            .values(view_count=Article.view_count + 1)
         )
         await self.session.flush()
-    
+
     async def get_counts(self) -> int:
-        return await self.session.scalar(
+        return (await self.session.scalar(
             func.count(Article.id)
-        )
+        )) or 0
+
+    async def get_monthly_count(self) -> int:
+        """获取本月文章数"""
+        now = datetime.now()
+        start_of_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        return (await self.session.scalar(
+            select(func.count(Article.id))
+            .where(
+                Article.create_at >= start_of_month
+            )
+        )) or 0
+
+    async def toggle_public(self, article_id: int) -> None:
+        article = await self.session.get(Article, article_id)
+        if article:
+            article.is_public = not article.is_public
+            await self.session.flush()
+
+    async def toggle_recommended(self, article_id: int) -> None:
+        article = await self.session.get(Article, article_id)
+        if article:
+            article.is_recommended = not article.is_recommended
+            await self.session.flush()
+
+    async def update_category(self, article_id: int, category_id: int) -> None:
+        article = await self.session.get(Article, article_id)
+        if article:
+            article.category_id = category_id
+            await self.session.flush()

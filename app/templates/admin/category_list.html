@@ -1,0 +1,85 @@
+{% extends "admin/components/base.html" %}
+
+{% block title %}分类管理{% endblock %}
+
+{% block content %}
+<div class="flex h-screen overflow-hidden">
+    {% include 'admin/components/sidebar.html' %}
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+        {% include 'admin/components/header.html' %}
+
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-900">分类管理</h2>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="mb-4 rounded-md px-4 py-3 text-sm
+                {% if category == 'error' %}bg-red-50 text-red-600{% else %}bg-green-50 text-green-600{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <!-- 分类列表 -->
+            <div class="bg-white rounded-lg shadow-xs ring-1 ring-border">
+                <table class="w-full text-sm text-left">
+                    <thead class="border-b border-border text-gray-500">
+                        <tr>
+                            <th class="px-5 py-3 font-medium">ID</th>
+                            <th class="px-5 py-3 font-medium">分类名称</th>
+                            <th class="px-5 py-3 font-medium">文章数</th>
+                            <th class="px-5 py-3 font-medium">创建时间</th>
+                            <th class="px-5 py-3 font-medium text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                        {% for cat in categories %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-5 py-3 text-gray-500">{{ cat.id }}</td>
+                            <td class="px-5 py-3">
+                                <form method="POST" action="{{ url_for('admin.category_update', category_id=cat.id) }}" class="inline-flex items-center gap-2">
+                                    <input type="text" name="name" value="{{ cat.name }}" required
+                                        class="rounded border border-border px-2 py-1 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-primary/40" />
+                                    <button type="submit"
+                                        class="text-xs text-primary hover:underline">保存</button>
+                                </form>
+                            </td>
+                            <td class="px-5 py-3 text-gray-600">{{ category_counts.get(cat.id, 0) }}</td>
+                            <td class="px-5 py-3 text-gray-500">{{ cat.create_at | datetime }}</td>
+                            <td class="px-5 py-3 text-right">
+                                <form method="POST" action="{{ url_for('admin.category_delete', category_id=cat.id) }}" class="inline"
+                                    onsubmit="return confirm('确定删除分类「{{ cat.name }}」吗？')">
+                                    <button type="submit"
+                                        class="text-xs text-red-600 hover:underline">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="px-5 py-10 text-center text-gray-400">暂无分类</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 新增分类 -->
+            <div class="bg-white rounded-lg shadow-xs ring-1 ring-border p-5 mb-6">
+                <h3 class="text-sm font-semibold text-gray-900 mb-3">新增分类</h3>
+                <form method="POST" action="{{ url_for('admin.category_create') }}" class="flex gap-3">
+                    <input type="text" name="name" placeholder="请输入分类名称" required
+                        class="flex-1 rounded-md border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
+                    <button type="submit"
+                        class="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white hover:opacity-90">添加</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

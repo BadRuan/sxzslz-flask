@@ -5,8 +5,7 @@ from uuid import uuid4
 from sqlalchemy import BigInteger, Integer, Text, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
-from .base import Base
-
+from app.models import Base
 if TYPE_CHECKING:
     from .user import User
     from .category import Category
@@ -27,8 +26,6 @@ class Article(Base):
     slug: Mapped[str] = mapped_column(String(255), unique=True, default=generate_slug)
     # 标题
     title: Mapped[str] = mapped_column(String(200), nullable=False)
-    # 摘要
-    summary: Mapped[str] = mapped_column(String(500), nullable=True)
     # 分类id
     category_id: Mapped[int] = mapped_column(
         Integer,

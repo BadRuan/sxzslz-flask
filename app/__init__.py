@@ -2,7 +2,7 @@ from os import makedirs
 from quart import Quart, render_template, g
 from app.settings import settings
 from app.database import AsyncSessionLocal, async_engine
-from app.views import user_bp, home_bp, news_bp, image_bp, auth_bp, attachment_bp
+from app.views import user_bp, home_bp, article_bp, image_bp, auth_bp, attachment_bp, admin_bp
 
 
 def format_datetime(value, fmt="%Y-%m-%d"):
@@ -50,9 +50,10 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(home_bp)
-    app.register_blueprint(news_bp, url_prefix='/article')
+    app.register_blueprint(article_bp, url_prefix='/article')
     app.register_blueprint(image_bp, url_prefix='/image')
     app.register_blueprint(attachment_bp, url_prefix='/attachment')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
     @app.errorhandler(404)
     async def handle_404(error):

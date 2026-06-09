@@ -7,11 +7,14 @@ from app.crud import ImageCrud
 class ImageService:
     def __init__(self, session: AsyncSession) -> None:
         self.crud = ImageCrud(session)
-    
+
     async def get_by_filename(self, filename: str) -> Optional[Image]:
         return await self.crud.get_by_filename(filename)
-    
-    async def save_image(self, image: Image) -> Image:
+
+    async def record_view(self, filename: str) -> None:
+        await self.crud.record_view(filename)
+
+    async def save(self, image: Image) -> Image:
         return await self.crud.save_image(image)
 
     async def get_counts(self) -> int:

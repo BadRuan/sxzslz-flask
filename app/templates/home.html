@@ -24,7 +24,7 @@
                         <!-- 幻灯片 -->
                         <div class="relative aspect-[16/9] overflow-hidden">
                             
-                            {% for article in recommented %}
+                            {% for article in recommended %}
                             <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100"
                                 data-slide="0">
                                 <a target="_blank" href="{{ url_for('article.detail', article_slug=article.slug) }}" class="block h-full">

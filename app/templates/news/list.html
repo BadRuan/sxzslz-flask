@@ -50,9 +50,6 @@
                                 <h2 class="text-base font-semibold text-gray-900 hover:text-primary">
                                     <a target="_blank" href="{{ url_for('article.detail', article_slug=news.slug) }}">{{ news.title }}</a>
                                 </h2>
-                                <p class="mt-2 text-sm text-gray-600 line-clamp-2">
-                                   {{ news.summary }} 
-                                </p>
                             </div>
                             <time class="ml-4 shrink-0 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">{{
                                 news.create_at | datetime('%Y-%m-%d') }}</time>

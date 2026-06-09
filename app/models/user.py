@@ -7,10 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError, InvalidHash
-from .base import Base
-
+from app.models import Base
 if TYPE_CHECKING:
-    from .article import Article
+    from app.models import Article, Image, Attachment
+
 
 ph = PasswordHasher(
     time_cost=3,       # 迭代次数
@@ -30,6 +30,20 @@ class User(Base):
 
     articles: Mapped[List[Article]] = relationship(
         "Article",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="selectin"
+    )
+    
+    images: Mapped[List[Image]] = relationship(
+        "Image",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="selectin"
+    )
+    
+    attachments: Mapped[List[Attachment]] = relationship(
+        "Attachment",
         back_populates="user",
         cascade="all, delete-orphan",
         lazy="selectin"
