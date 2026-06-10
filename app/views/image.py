@@ -1,12 +1,7 @@
-from os import path, SEEK_END
-from werkzeug.utils import secure_filename
-from mimetypes import guess_type
-from PIL import Image as PILImage
 from quart import Blueprint, request, render_template, g, jsonify, send_from_directory
 from app.settings import settings
-from app.models import Image
 from app.services import ImageService
-from app.utils import generate_unique_filename
+from app.utils import get_current_user_id
 
 
 bp = Blueprint('image', __name__)
@@ -34,34 +29,8 @@ async def upload_image():
     if not allowed_file(file.filename):
         return jsonify({'error': '不支持的文件类型'}), 400
 
-    original_filename = secure_filename(file.filename)
-    filename = generate_unique_filename(original_filename)
-    file_path = path.join(settings.IMAGE_UPLOAD_FOLDER, filename)
-
-    file.seek(0, SEEK_END)
-    file_size = file.tell()
-    file.seek(0)
-
-    mime_type = guess_type(filename)[0] or 'application/octet-stream'
-
-    try:
-        img = PILImage.open(file)
-        width, height = img.size
-        img = img.convert('RGB')
-        img.save(file_path, 'JPEG', quality=85, optimize=True)
-    except Exception as e:
-        return jsonify({'error': f'图片处理失败: {str(e)}'}), 400
-
-    image = Image(
-        filename=filename,
-        original_filename=original_filename,
-        user_id='b483d5ef443444e7a1b8388545bd7038',
-        file_size=file_size,
-        mime_type=mime_type,
-        width=width,
-        height=height
-    )
-    await service.save(image)
+    user_id = get_current_user_id()
+    image = await service.upload(file, user_id)
 
     return jsonify({
         'status': 'success',

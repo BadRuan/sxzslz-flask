@@ -1,17 +1,12 @@
-from os import path, SEEK_END
-from werkzeug.utils import secure_filename
-from mimetypes import guess_type
-from PIL import Image as PILImage
 from quart import Blueprint, render_template, request, g, redirect, url_for, flash
-from app.settings import settings
-from app.models import Image
 from app.services import ArticleService, CategoryService, ImageService
-from app.utils import generate_unique_filename
+from app.utils import login_required, get_current_user_id
 
 
 bp = Blueprint('admin', __name__)
 
 @bp.route('/list')
+@login_required
 async def article_list():
     """后台文章列表"""
     db_session = g.db_session
@@ -38,6 +33,7 @@ async def article_list():
 
 
 @bp.route('/create', methods=['GET'])
+@login_required
 async def create_form():
     """文章创建表单"""
     db_session = g.db_session
@@ -47,6 +43,7 @@ async def create_form():
 
 
 @bp.route('/create', methods=['POST'])
+@login_required
 async def handle_create():
     """处理文章创建"""
     form_data = await request.form
@@ -69,44 +66,13 @@ async def handle_create():
         return redirect(url_for('admin.create_form'))
 
     db_session = g.db_session
-    image_service = ImageService(db_session)
+    user_id = get_current_user_id()
     image_id = None
-    # TODO: 测试阶段硬编码，后续接入鉴权后从 session 获取
-    user_id = 'b483d5ef443444e7a1b8388545bd7038'
 
     # 处理可选的封面图片
     if 'cover_image' in files and files['cover_image'].filename:
-        file = files['cover_image']
-        original_filename = secure_filename(file.filename)
-        filename = generate_unique_filename(original_filename)
-        file_path = path.join(settings.IMAGE_UPLOAD_FOLDER, filename)
-
-        file.seek(0, SEEK_END)
-        file_size = file.tell()
-        file.seek(0)
-
-        mime_type = guess_type(filename)[0] or 'application/octet-stream'
-
-        try:
-            img = PILImage.open(file)
-            width, height = img.size
-            img = img.convert('RGB')
-            img.save(file_path, 'JPEG', quality=85, optimize=True)
-        except Exception as e:
-            await flash(f'图片处理失败: {str(e)}', 'error')
-            return redirect(url_for('admin.create_form'))
-
-        image = Image(
-            filename=filename,
-            original_filename=original_filename,
-            file_size=file_size,
-            mime_type=mime_type,
-            user_id=user_id,
-            width=width,
-            height=height
-        )
-        saved_image = await image_service.save(image)
-        image_id = saved_image.id
+        image = await ImageService(db_session).upload(files['cover_image'], user_id)
+        image_id = image.id
 
     # 创建文章
     article_service = ArticleService(db_session)
@@ -124,6 +90,7 @@ async def handle_create():
 
 
 @bp.route('/article/<int:article_id>/edit', methods=['GET'])
+@login_required
 async def edit_form(article_id: int):
     """文章编辑表单"""
     db_session = g.db_session
@@ -140,6 +107,7 @@ async def edit_form(article_id: int):
 
 
 @bp.route('/article/<int:article_id>/edit', methods=['POST'])
+@login_required
 async def handle_edit(article_id: int):
     """处理文章编辑"""
     form_data = await request.form
@@ -165,38 +133,9 @@ async def handle_edit(article_id: int):
 
     # 处理可选的封面图片
     if 'cover_image' in files and files['cover_image'].filename:
-        file = files['cover_image']
-        original_filename = secure_filename(file.filename)
-        filename = generate_unique_filename(original_filename)
-        file_path = path.join(settings.IMAGE_UPLOAD_FOLDER, filename)
-
-        file.seek(0, SEEK_END)
-        file_size = file.tell()
-        file.seek(0)
-
-        mime_type = guess_type(filename)[0] or 'application/octet-stream'
-
-        try:
-            img = PILImage.open(file)
-            width, height = img.size
-            img = img.convert('RGB')
-            img.save(file_path, 'JPEG', quality=85, optimize=True)
-        except Exception as e:
-            await flash(f'图片处理失败: {str(e)}', 'error')
-            return redirect(url_for('admin.edit_form', article_id=article_id))
-
-        user_id = 'b483d5ef443444e7a1b8388545bd7038'
-        image = Image(
-            filename=filename,
-            original_filename=original_filename,
-            file_size=file_size,
-            mime_type=mime_type,
-            user_id=user_id,
-            width=width,
-            height=height
-        )
-        saved_image = await ImageService(db_session).save(image)
-        image_id = saved_image.id
+        user_id = get_current_user_id()
+        image = await ImageService(db_session).upload(files['cover_image'], user_id)
+        image_id = image.id
 
     article_service = ArticleService(db_session)
     await article_service.update(
@@ -213,6 +152,7 @@ async def handle_edit(article_id: int):
 
 
 @bp.route('/article/<int:article_id>/toggle-public', methods=['POST'])
+@login_required
 async def toggle_public(article_id: int):
     """切换文章公开状态"""
     article_service = ArticleService(g.db_session)
@@ -221,6 +161,7 @@ async def toggle_public(article_id: int):
 
 
 @bp.route('/article/<int:article_id>/toggle-recommended', methods=['POST'])
+@login_required
 async def toggle_recommended(article_id: int):
     """切换文章推荐状态"""
     article_service = ArticleService(g.db_session)
@@ -229,6 +170,7 @@ async def toggle_recommended(article_id: int):
 
 
 @bp.route('/article/<int:article_id>/update-category', methods=['POST'])
+@login_required
 async def update_category(article_id: int):
     """修改文章分类"""
     form_data = await request.form
@@ -240,6 +182,7 @@ async def update_category(article_id: int):
 
 
 @bp.route('/categories')
+@login_required
 async def category_list():
     """分类列表"""
     db_session = g.db_session
@@ -259,6 +202,7 @@ async def category_list():
 
 
 @bp.route('/category/create', methods=['POST'])
+@login_required
 async def category_create():
     """创建分类"""
     form_data = await request.form
@@ -274,6 +218,7 @@ async def category_create():
 
 
 @bp.route('/category/<int:category_id>/update', methods=['POST'])
+@login_required
 async def category_update(category_id: int):
     """修改分类名称"""
     form_data = await request.form
@@ -289,6 +234,7 @@ async def category_update(category_id: int):
 
 
 @bp.route('/category/<int:category_id>/delete', methods=['POST'])
+@login_required
 async def category_delete(category_id: int):
     """删除分类"""
     category_service = CategoryService(g.db_session)

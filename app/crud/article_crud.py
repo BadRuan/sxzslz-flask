@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func, update
 from sqlalchemy.orm import joinedload
 from app.models import Article, Content
-from app.utils import markdown_to_html
 
 
 class ArticleCrud:
@@ -160,7 +159,8 @@ class ArticleCrud:
         return result.scalar_one_or_none()
 
     async def update(self, article_id: int, title: str, category_id: int,
-                     content: str, is_public: bool, image_id: Optional[int] = None) -> None:
+                     content: str, html: str, is_public: bool,
+                     image_id: Optional[int] = None) -> None:
         """更新文章"""
         article = await self.session.get(Article, article_id)
         if article:
@@ -171,7 +171,7 @@ class ArticleCrud:
                 article.image_id = image_id
             if article.content:
                 article.content.markdown = content
-                article.content.html = markdown_to_html(content)
+                article.content.html = html
             await self.session.flush()
 
     async def get_article_by_slug(self, article_slug: str) -> Optional[Article]:

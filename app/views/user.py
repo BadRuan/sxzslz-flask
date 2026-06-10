@@ -1,11 +1,11 @@
 from quart import Blueprint, render_template, g
-from app.crud import UserCrud
+from app.services import UserService
 
 
 bp = Blueprint('user', __name__)
 
 @bp.route('/users')
 async def users():
-    crud = UserCrud(g.db_session)
-    users = await crud.get_all_users()
+    service = UserService(g.db_session)
+    users = await service.get_all()
     return await render_template('user/user_list.html', users=users)

@@ -1,8 +1,5 @@
 from quart import Blueprint, render_template, request, redirect, url_for, session, g, flash
-from sqlalchemy import select
-from app.models import User
-from app.services import ArticleService, ImageService, AttachmentService
-from app.crud import UserCrud
+from app.services import ArticleService, ImageService, AttachmentService, UserService
 
 
 bp = Blueprint('auth', __name__)
@@ -23,10 +20,9 @@ async def login():
         await flash('用户名和密码不能为空', 'error')
         return await render_template('admin/login.html')
 
-    # 查询用户
-    stmt = select(User).where(User.username == username)
-    result = await g.db_session.execute(stmt)
-    user = result.scalar_one_or_none()
+    # 通过 service 查询用户
+    user_service = UserService(g.db_session)
+    user = await user_service.get_by_username(username)
 
     if user is None or not user.check_password(password):
         await flash('用户名或密码错误', 'error')
@@ -45,13 +41,13 @@ async def dashboard():
     article_service = ArticleService(db_session)
     image_service = ImageService(db_session)
     attachment_service = AttachmentService(db_session)
-    user_crud = UserCrud(db_session)
+    user_service = UserService(db_session)
 
     article_count = await article_service.get_counts()
     monthly_count = await article_service.get_monthly_count()
     image_count = await image_service.get_counts()
     attachment_count = await attachment_service.get_counts()
-    user_count = await user_crud.get_count()
+    user_count = await user_service.get_count()
     recent_articles = await article_service.get_latest(10)
 
     return await render_template(

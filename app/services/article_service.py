@@ -35,7 +35,8 @@ class ArticleService:
 
     async def update(self, article_id: int, title: str, category_id: int,
                      content: str, is_public: bool, image_id: Optional[int] = None) -> None:
-        await self.crud.update(article_id, title, category_id, content, is_public, image_id)
+        html = markdown_to_html(content)
+        await self.crud.update(article_id, title, category_id, content, html, is_public, image_id)
 
     async def get_detail(self, article_slug: str) -> Optional[Article]:
         detail = await self.crud.get_article_by_slug(article_slug)
