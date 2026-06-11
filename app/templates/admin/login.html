@@ -1,19 +1,24 @@
-{% extends "admin/components/base.html" %}
+{% extends "admin/base.html" %}
 
 {% block title %}登录{% endblock %}
 
 {% block content %}
-    <div class="min-h-screen flex flex-col justify-center items-center px-4">
-        <div class="w-full max-w-md">
+    <div class="min-h-screen flex flex-col justify-center items-center px-4 relative overflow-hidden">
+        <!-- 背景装饰 -->
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-72 h-72 bg-blue-500/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+        <div class="w-full max-w-md relative z-10">
             <!-- Logo -->
             <div class="text-center mb-8">
-                <img src="{{ url_for('static', filename='icon/water-logo.svg') }}" class="h-12 mx-auto mb-4" alt="logo" />
+                <img src="./static/icon/water-logo.svg" class="h-12 mx-auto mb-4" alt="logo" />
                 <h1 class="text-2xl font-bold text-gray-900">芜湖市鸠江区沈巷镇水利站</h1>
                 <p class="text-sm text-gray-500 mt-1">后台管理系统</p>
             </div>
 
             <!-- 登录框 -->
-            <div class="bg-white rounded-lg shadow-sm ring-1 ring-border p-6">
+            <div class="bg-white rounded-xl shadow-lg ring-1 ring-border/50 p-8">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -48,7 +53,7 @@
                         </div>
 
                         <button type="submit"
-                            class="w-full rounded-md bg-primary py-2 text-sm font-semibold text-white hover:bg-primary-dark transition">
+                            class="w-full rounded-md bg-primary py-2.5 text-sm font-semibold text-white hover:bg-primary-dark transition shadow-sm">
                             登录系统
                         </button>
                     </div>

@@ -1,5 +1,5 @@
 from quart import Blueprint, render_template, g
-from app.services import ArticleService
+from app.modules.admin.services import ArticleService
 
 
 bp = Blueprint('home', __name__)

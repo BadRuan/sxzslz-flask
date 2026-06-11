@@ -2,7 +2,7 @@ from typing import Optional
 from werkzeug.utils import secure_filename
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Attachment
-from app.crud import AttachmentCrud
+from app.modules.attachment.crud import AttachmentCrud
 from app.utils import generate_unique_filename
 
 

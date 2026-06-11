@@ -1,8 +1,8 @@
 from os import makedirs
-from quart import Quart, render_template, g, jsonify, session, redirect, url_for, flash
+from quart import Quart, render_template, g, jsonify, redirect, url_for, flash
 from app.settings import settings
 from app.database import AsyncSessionLocal, async_engine
-from app.views import user_bp, home_bp, article_bp, image_bp, auth_bp, attachment_bp, admin_bp
+from app.urls import urlpatterns
 from app.exceptions import AppError
 
 
@@ -48,13 +48,8 @@ def create_app():
     makedirs(settings.IMAGE_UPLOAD_FOLDER, exist_ok=True)
     makedirs(settings.ATTACHMENT_UPLOAD_FOLDER, exist_ok=True)
     
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(user_bp)
-    app.register_blueprint(home_bp)
-    app.register_blueprint(article_bp, url_prefix='/article')
-    app.register_blueprint(image_bp, url_prefix='/image')
-    app.register_blueprint(attachment_bp, url_prefix='/attachment')
-    app.register_blueprint(admin_bp, url_prefix='/admin')
+    for bp, prefix in urlpatterns:
+        app.register_blueprint(bp, url_prefix=prefix)
 
     @app.errorhandler(AppError)
     async def handle_app_error(error):

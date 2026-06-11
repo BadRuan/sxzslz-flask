@@ -1,9 +1,37 @@
 from quart import Blueprint, render_template, request, g, redirect, url_for, flash
-from app.services import ArticleService, CategoryService, ImageService
+from app.modules.admin.services import ArticleService, CategoryService, UserService
+from app.modules.image.services import ImageService
+from app.modules.attachment.services import AttachmentService
 from app.utils import login_required, get_current_user_id
 
 
 bp = Blueprint('admin', __name__)
+path_prefix: str = 'admin/'
+
+@bp.route('/dashboard')
+async def dashboard():
+    db_session = g.db_session
+    article_service = ArticleService(db_session)
+    image_service = ImageService(db_session)
+    attachment_service = AttachmentService(db_session)
+    user_service = UserService(db_session)
+
+    article_count = await article_service.get_counts()
+    monthly_count = await article_service.get_monthly_count()
+    image_count = await image_service.get_counts()
+    attachment_count = await attachment_service.get_counts()
+    user_count = await user_service.get_count()
+    recent_articles = await article_service.get_latest(10)
+
+    return await render_template(
+        path_prefix + 'dashboard.html',
+        article_count=article_count,
+        monthly_count=monthly_count,
+        image_count=image_count,
+        attachment_count=attachment_count,
+        user_count=user_count,
+        recent_articles=recent_articles
+    )
 
 @bp.route('/list')
 @login_required
@@ -11,19 +39,18 @@ async def article_list():
     """后台文章列表"""
     db_session = g.db_session
     article_service = ArticleService(db_session)
-    category_service = CategoryService(db_session)
+    user_id: str = get_current_user_id()
 
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
     articles, total = await article_service.get_admin_paginated(
-        page=page, per_page=per_page
+        user_id=user_id, page=page, per_page=per_page
     )
-    categories = await category_service.get_all()
     total_pages = (total + per_page - 1) // per_page if total > 0 else 1
 
     return await render_template(
-        'admin/article_list.html',
+        path_prefix + 'article_list.html',
         articles=articles,
         page=page,
         per_page=per_page,
@@ -39,7 +66,7 @@ async def create_form():
     db_session = g.db_session
     category_service = CategoryService(db_session)
     categories = await category_service.get_all()
-    return await render_template('admin/article_edit.html', categories=categories)
+    return await render_template(path_prefix + 'article_edit.html', categories=categories)
 
 
 @bp.route('/create', methods=['POST'])
@@ -103,7 +130,7 @@ async def edit_form(article_id: int):
         return redirect(url_for('admin.article_list'))
 
     categories = await category_service.get_all()
-    return await render_template('admin/article_edit.html', article=article, categories=categories)
+    return await render_template(path_prefix + 'article_edit.html', article=article, categories=categories)
 
 
 @bp.route('/article/<int:article_id>/edit', methods=['POST'])
@@ -116,7 +143,7 @@ async def handle_edit(article_id: int):
     title = form_data.get('title', '').strip()
     category_id = form_data.get('category_id', type=int)
     content = form_data.get('content', '').strip()
-    is_public = form_data.get('is_public') == 'on'
+    is_recommended = form_data.get('is_recommended') == 'on'
 
     if not title:
         await flash('文章标题不能为空', 'error')
@@ -143,7 +170,7 @@ async def handle_edit(article_id: int):
         title=title,
         category_id=category_id,
         content=content,
-        is_public=is_public,
+        is_recommended=is_recommended,
         image_id=image_id
     )
 
@@ -195,7 +222,7 @@ async def category_list():
         category_counts[cat.id] = await category_service.get_article_count(cat.id)
 
     return await render_template(
-        'admin/category_list.html',
+        path_prefix + 'category_list.html',
         categories=categories,
         category_counts=category_counts
     )

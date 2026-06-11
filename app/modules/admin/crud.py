@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc, func, update
 from sqlalchemy.orm import joinedload
-from app.models import Article, Content
+from app.models import Article, Content, Category, User
 
 
 class ArticleCrud:
@@ -110,6 +110,7 @@ class ArticleCrud:
 
     async def get_admin_paginated(
         self,
+        user_id: str,
         page: int = 1,
         per_page: int = 10
     ) -> Tuple[List[Article], int]:
@@ -120,6 +121,7 @@ class ArticleCrud:
         offset = (page - 1) * per_page
         stmt = (
             base_query
+            .where(Article.user_id == user_id)
             .options(
                 joinedload(Article.user),
                 joinedload(Article.category)
@@ -162,7 +164,13 @@ class ArticleCrud:
                      content: str, html: str, is_public: bool,
                      image_id: Optional[int] = None) -> None:
         """更新文章"""
-        article = await self.session.get(Article, article_id)
+        stmt = (
+            select(Article)
+            .where(Article.id == article_id)
+            .options(joinedload(Article.content))
+        )
+        result = await self.session.execute(stmt)
+        article = result.scalar_one_or_none()
         if article:
             article.title = title
             article.category_id = category_id
@@ -230,3 +238,69 @@ class ArticleCrud:
         if article:
             article.category_id = category_id
             await self.session.flush()
+
+
+class CategoryCrud:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def get_all_categories(self) -> List[Category]:
+        stmt = (
+            select(Category)
+            .order_by(Category.create_at)
+        )
+        result = await self.session.execute(stmt)
+        return list(result.scalars().all())
+
+    async def get_by_id(self, category_id: int) -> Optional[Category]:
+        return await self.session.get(Category, category_id)
+
+    async def create_category(self, category: Category) -> Category:
+        self.session.add(category)
+        await self.session.flush()
+        return category
+
+    async def update_name(self, category_id: int, name: str) -> None:
+        category = await self.session.get(Category, category_id)
+        if category:
+            category.name = name
+            await self.session.flush()
+
+    async def delete_category(self, category_id: int) -> bool:
+        category = await self.session.get(Category, category_id)
+        if category:
+            await self.session.delete(category)
+            await self.session.flush()
+            return True
+        return False
+
+    async def get_article_count(self, category_id: int) -> int:
+        return (await self.session.scalar(
+            select(func.count(Article.id)).where(Article.category_id == category_id)
+        )) or 0
+
+
+class UserCrud:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def get_all_users(self) -> List[User]:
+        stmt = select(User).order_by(User.create_at)
+        result = await self.session.execute(stmt)
+        users = result.scalars().all()
+        return list(users)
+
+    async def get_user_by_username(self, username: str) -> Optional[User]:
+        stmt = select(User).where(User.username == username)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
+    async def create_user(self, user: User) -> User:
+        self.session.add(user)
+        await self.session.flush()
+        return user
+
+    async def get_count(self) -> int:
+        return (await self.session.scalar(
+            func.count(User.id)
+        )) or 0

@@ -1,6 +1,6 @@
 from quart import Blueprint, request, render_template, g, jsonify, send_from_directory
 from app.settings import settings
-from app.services import ImageService
+from app.modules.image.services import ImageService
 from app.utils import get_current_user_id
 
 

@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image as PILImage
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import Image
-from app.crud import ImageCrud
+from app.modules.image.crud import ImageCrud
 from app.settings import settings
 from app.utils import generate_unique_filename
 

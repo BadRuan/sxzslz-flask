@@ -1,4 +1,4 @@
-{% extends "admin/components/base.html" %}
+{% extends "admin/base.html" %}
 
 {% block title %}文章管理{% endblock %}
 
@@ -48,7 +48,9 @@
                         {% for article in articles %}
                         <tr class="hover:bg-gray-50 text-center">
                             <td class="px-5 py-3 text-gray-900 font-medium max-w-xs truncate">
+                                <a href="{{ url_for('article.detail', article_slug=article.slug) }}" target="_blank" class="text-sm text-gray-700 hover:text-primary truncate">
                                 {{ article.title }}
+                                </a>
                             </td>
                             <td class="px-5 py-3 text-gray-600">
                                 {{ article.category.name }}

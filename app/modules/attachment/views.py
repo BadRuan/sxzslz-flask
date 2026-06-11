@@ -1,7 +1,7 @@
 from os import SEEK_END, path
 from quart import Blueprint, request, render_template, g, jsonify, send_from_directory
 from app.settings import settings
-from app.services import AttachmentService
+from app.modules.attachment.services import AttachmentService
 
 
 bp = Blueprint('attachment', __name__)
