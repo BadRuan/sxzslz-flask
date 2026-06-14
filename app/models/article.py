@@ -67,14 +67,12 @@ class Article(Base):
         back_populates="article",
         uselist=False,
         cascade="all, delete-orphan",
-        lazy="select"
     )
     # 图片
     image: Mapped[Image] = relationship(
         "Image",
         back_populates="articles",
         uselist=False,
-        lazy="select"
     )
 
     def __repr__(self) -> str:
